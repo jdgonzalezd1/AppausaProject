@@ -1,0 +1,3 @@
+CREATE USER 'appausauser'@'localhost' IDENTIFIED BY 'appausaacceso';
+GRANT ALL PRIVILEGES ON * . * TO 'appausauser'@'localhost';
+FLUSH PRIVILEGES;
