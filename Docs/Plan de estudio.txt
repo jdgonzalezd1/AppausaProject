@@ -1,0 +1,9 @@
+Desarrollar la plataforma (repositorio)
+Aplicativo web (este año)
+Desarrollar backend (spring boot)
+Desarrollar frontend (react)/Parcialmente
+---------------------------------
+Proximo año
+Frontend aplicativo movil (React native/Flutter)
+Videojuegos (Unity)
+
