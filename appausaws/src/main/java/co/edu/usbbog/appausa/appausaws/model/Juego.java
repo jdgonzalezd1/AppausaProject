@@ -35,13 +35,13 @@ import com.google.gson.Gson;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Juego.findAll", query = "SELECT j FROM Juego j")
-    , @NamedQuery(name = "Juego.findById", query = "SELECT j FROM Juego j WHERE j.juegoPK.id = :id")
+    , @NamedQuery(name = "Juego.findById", query = "SELECT j FROM Juego j WHERE j.id = :id")
     , @NamedQuery(name = "Juego.findByNombre", query = "SELECT j FROM Juego j WHERE j.nombre = :nombre")
     , @NamedQuery(name = "Juego.findByPuntaje", query = "SELECT j FROM Juego j WHERE j.puntaje = :puntaje")
     , @NamedQuery(name = "Juego.findByUrlDescarga", query = "SELECT j FROM Juego j WHERE j.urlDescarga = :urlDescarga")
     , @NamedQuery(name = "Juego.findByDispositivo", query = "SELECT j FROM Juego j WHERE j.dispositivo = :dispositivo")
     , @NamedQuery(name = "Juego.findByLinkApp", query = "SELECT j FROM Juego j WHERE j.linkApp = :linkApp")
-    , @NamedQuery(name = "Juego.findByTipoJuegoId", query = "SELECT j FROM Juego j WHERE j.juegoPK.tipoJuegoId = :tipoJuegoId")})
+    , @NamedQuery(name = "Juego.findByTipoJuegoId", query = "SELECT j FROM Juego j WHERE j.tipoJuego = :tipoJuego")})
 public class Juego implements Serializable {
 
     private static final long serialVersionUID = 1L;

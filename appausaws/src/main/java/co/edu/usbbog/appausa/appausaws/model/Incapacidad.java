@@ -33,10 +33,10 @@ import com.google.gson.Gson;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Incapacidad.findAll", query = "SELECT i FROM Incapacidad i")
-    , @NamedQuery(name = "Incapacidad.findByCod", query = "SELECT i FROM Incapacidad i WHERE i.incapacidadPK.cod = :cod")
+    , @NamedQuery(name = "Incapacidad.findByCod", query = "SELECT i FROM Incapacidad i WHERE i.cod = :cod")
     , @NamedQuery(name = "Incapacidad.findByInicioIncapacidad", query = "SELECT i FROM Incapacidad i WHERE i.inicioIncapacidad = :inicioIncapacidad")
     , @NamedQuery(name = "Incapacidad.findByFinIncapacidad", query = "SELECT i FROM Incapacidad i WHERE i.finIncapacidad = :finIncapacidad")
-    , @NamedQuery(name = "Incapacidad.findByConsultaMedica", query = "SELECT i FROM Incapacidad i WHERE i.incapacidadPK.consultaMedica = :consultaMedica")})
+    , @NamedQuery(name = "Incapacidad.findByConsultaMedica", query = "SELECT i FROM Incapacidad i WHERE i.consultaMedica = :consultaMedica")})
 public class Incapacidad implements Serializable {
 
     private static final long serialVersionUID = 1L;

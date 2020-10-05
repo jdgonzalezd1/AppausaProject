@@ -18,8 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import com.google.gson.Gson;
 
 /**
  *
@@ -140,11 +141,22 @@ public class TipoLicencia implements Serializable {
 
     @Override
     public String toString() {
-        return "TipoLicencia: " + toJson();
+        return "TipoLicencia: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,TipoLicencia.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("nombre", this.getNombre());
+    	json.put("descripcion", this.getDescripcion());
+    	json.put("remunerada", this.getRemunerada());
+    	return json;
+    }
+    
+    public TipoLicencia fromJson(JSONObject json) {
+    	this.setNombre(json.getString("nombre"));
+    	this.setDescripcion(json.getString("descripcion"));
+    	this.setRemunerada((short) json.getInt("remunerada"));
+    	return this;
     }
     
 }
