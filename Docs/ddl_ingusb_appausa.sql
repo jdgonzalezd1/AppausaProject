@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `ingusb_appausa`.`juego` (
   `dispositivo` VARCHAR(45) NOT NULL,
   `link_app` VARCHAR(45) NULL DEFAULT NULL,
   `tipo_juego_id` INT(3) NOT NULL,
-  PRIMARY KEY (`id`, `tipo_juego_id`),
+  PRIMARY KEY (`id`),
   INDEX `fk_juego_tipo_juego_idx` (`tipo_juego_id` ASC),
   CONSTRAINT `fk_juego_tipo_juego`
     FOREIGN KEY (`tipo_juego_id`)
@@ -97,13 +97,13 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS `ingusb_appausa`.`incapacidad` (
-  `cod` INT(10) NOT NULL,
+  `cod` INT(10) NOT NULL AUTO_INCREMENT,
   `inicio_incapacidad` DATE NOT NULL,
   `fin_incapacidad` DATE NOT NULL,
-  `tipo_incapacidad` VARCHAR(45) NOT NULL,
   `indicaciones` TEXT(150) NOT NULL,
+  `tipo_incapacidad` VARCHAR(45) NOT NULL,  
   `consulta_medica` INT(6) NOT NULL,
-  PRIMARY KEY (`cod`, `consulta_medica`),
+  PRIMARY KEY (`cod`),
   INDEX `fk_incapacidad_tipo_idx` (`tipo_incapacidad` ASC),
   INDEX `fk_incapacidad_consulta_medica_idx` (`consulta_medica` ASC),
   CONSTRAINT `fk_incapacidad_tipo`
@@ -168,7 +168,7 @@ DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS `ingusb_appausa`.`tipo_evento` (
   `nombre` VARCHAR(45) NOT NULL,
-  `descripción` VARCHAR(45) NOT NULL,
+  `descripcion` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`nombre`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -186,7 +186,7 @@ DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS `ingusb_appausa`.`nivel_riesgo` (
   `nombre` VARCHAR(8) NOT NULL,
-  `descripción` VARCHAR(45) NOT NULL,
+  `descripcion` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`nombre`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -208,7 +208,7 @@ DEFAULT CHARACTER SET = utf8;
 
 CREATE TABLE IF NOT EXISTS `ingusb_appausa`.`tipo_afeccion` (
   `nombre` VARCHAR(45) NOT NULL,
-  `descripción` VARCHAR(45) NOT NULL,
+  `descripcion` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`nombre`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
