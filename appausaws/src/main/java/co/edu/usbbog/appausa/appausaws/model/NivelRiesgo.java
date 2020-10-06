@@ -21,6 +21,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.google.gson.Gson;
 
+import net.minidev.json.JSONObject;
+
 /**
  *
  * @author aasanchez
@@ -116,11 +118,22 @@ public class NivelRiesgo implements Serializable {
 
     @Override
     public String toString() {
-        return "NivelRiesgo: " + toJson();
+        return "NivelRiesgo: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,NivelRiesgo.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("nombre", this.getNombre());
+    	json.put("descricion",this.getDescripcion());
+    	
+    	return json;
     }
     
+    
+    public NivelRiesgo fromJson(JSONObject json) {
+    	this.setNombre(json.getAsString("nombre"));
+    	this.setDescripcion(json.getAsString("descripcion"));
+    	
+    	return this;
+    }
 }

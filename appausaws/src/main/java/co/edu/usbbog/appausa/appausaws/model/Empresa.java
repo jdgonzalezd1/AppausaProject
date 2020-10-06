@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 /**
@@ -207,11 +209,34 @@ public class Empresa implements Serializable {
 
     @Override
     public String toString() {
-        return "Empresa: " + toJson();
+        return "Empresa: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,Empresa.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("nit", this.getNit());
+    	json.put("nombre", this.getNombre());
+    	json.put("direccion", this.getDireccion());
+    	json.put("ciudad", this.getCiudad());
+    	json.put("telefono", this.getTelefono());
+    	json.put("correoElectronico", this.getCorreoElectronico());
+    	json.put("descripEmpresa", this.getDescripEmpresa());
+    	json.put("numEmpleados", this.getNumEmpleados());
+    	json.put("tipo", this.getTipo());
+    	return json;
+    }
+    
+    public Empresa fromJson(JSONObject json) {
+    	this.setNit(json.getString("nit"));
+    	this.setNombre(json.getString("nombre"));
+    	this.setDireccion(json.getString("direccion"));
+    	this.setCiudad(json.getString("ciudad"));
+    	this.setTelefono(json.getString("telefono"));
+    	this.setCorreoElectronico(json.getString("correoElectronico"));
+    	this.setDescripEmpresa(json.getString("descripEmpresa"));
+    	this.setNumEmpleados(json.getInt("numEmpleados"));
+    	this.setNombre(json.getString("tipo"));
+    	return this;
     }
     
 }

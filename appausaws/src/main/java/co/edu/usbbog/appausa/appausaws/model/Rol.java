@@ -20,6 +20,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.google.gson.Gson;
 
+import net.minidev.json.JSONObject;
+
 /**
  *
  * @author aasanchez
@@ -103,11 +105,22 @@ public class Rol implements Serializable {
 
     @Override
     public String toString() {
-        return "Rol: " + toJson();
+        return "Rol: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,Rol.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("nombre", this.getNombre());
+    	json.put("descrpcion", this.getDescrpcion());
+    	//FK
+    	return json;
+    }
+    
+    public Rol fromJson(JSONObject json) {
+    	this.setNombre(json.getAsString("nombre"));
+    	this.setDescrpcion(json.getAsString("descrpcion"));
+    	//
+    	return this;
     }
     
 }

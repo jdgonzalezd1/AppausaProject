@@ -6,6 +6,9 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -26,6 +29,9 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
@@ -265,11 +271,36 @@ public class Cuenta implements Serializable {
 
     @Override
     public String toString() {
-        return "Cuenta: " + toJson();
+        return "Cuenta: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,Cuenta.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("empleado", this.getEmpleado());
+    	json.put("username", this.getUsername());
+    	json.put("contrasenia", this.getContrasenia());
+    	json.put("ultimoAcceso", this.getUltimoAcceso());
+    	json.put("puntajeTotal", this.getPuntajeTotal());
+    	json.put("puntajeMes", this.getPuntajeMes());
+    	json.put("tiempoTotal", this.getTiempoTotal());
+    	json.put("tiempoMes", this.getTiempoMes());
+    	//FKS
+    	return json;
+    }
+    
+    public Cuenta fromJson(JSONObject json) throws JSONException, ParseException {
+    	this.setEmpleado(json.getInt("empleado"));
+    	this.setUsername(json.getString("username"));
+    	this.setContrasenia(json.getString("contrasenia"));
+    	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getString("ultimoAcceso"));
+    	this.setUltimoAcceso(f);
+    	this.setPuntajeTotal(json.getString("puntajeTotal"));
+    	this.setPuntajeMes(json.getString("puntajeMes"));
+    	f = new SimpleDateFormat("HH:mm:ss").parse(json.getString("tiemnpoTotal"));
+    	this.setTiempoTotal(f);
+    	f = new SimpleDateFormat("HH:mm:ss").parse(json.getString("tiemnpoMes"));
+    	this.setTiempoMes(f);
+    	return this;
     }
     
 }

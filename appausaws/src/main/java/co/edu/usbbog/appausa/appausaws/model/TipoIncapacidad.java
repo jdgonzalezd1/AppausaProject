@@ -22,6 +22,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.google.gson.Gson;
 
+import net.minidev.json.JSONObject;
+
 /**
  *
  * @author aasanchez
@@ -130,11 +132,23 @@ public class TipoIncapacidad implements Serializable {
 
     @Override
     public String toString() {
-        return "TipoIncapacidad: " + toJson();
+        return "TipoIncapacidad: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,TipoIncapacidad.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("nombre", this.getNombre());
+    	json.put("descrpcion", this.getDescripcion());
+    	json.put("puntajeMax", this.getPeriodoMax());
+    	return json;
+    }
+    
+    public TipoIncapacidad fromJson(JSONObject json) {
+    	this.setNombre(json.getAsString("nombre"));
+    	this.setDescripcion(json.getAsString("descrpcion"));
+    	this.setPeriodoMax((int) json.getAsNumber("periodoMax"));
+    	//
+    	return this;
     }
     
 }

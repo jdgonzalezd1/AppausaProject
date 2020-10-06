@@ -6,6 +6,8 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -21,6 +23,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.gson.Gson;
+
+import net.minidev.json.JSONObject;
 
 /**
  *
@@ -155,11 +159,33 @@ public class Partida implements Serializable {
 
     @Override
     public String toString() {
-        return "Partida: " + toJson();
+        return "Partida: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,Partida.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("partidaPk", this.getPartidaPK());
+    	json.put("inicio", this.getInicio());
+    	json.put("fin", this.getFin());
+    	json.put("puntaje", this.getPuntaje());
+    	json.put("duracion", this.getDuracion());
+    	json.put("cuenta", this.getCuenta());
+    	json.put("juego", this.getJuego());
+    	return json;
+    }
+    
+    public Partida fromJson(JSONObject json) throws ParseException {
+    	this.setPartidaPK((PartidaPK) json.get("partidaPK"));
+    	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getAsString("inicio"));
+    	this.setInicio(f);
+    	f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getAsString("fin"));
+    	this.setFin(f);
+    	this.setPuntaje((int) json.getAsNumber("puntaje"));
+    	f = new SimpleDateFormat("HH:mm:ss").parse(json.getAsString("duracion"));
+    	this.setDuracion(f);
+    	this.setCuenta((Cuenta) json.get("cuenta"));
+    	this.setJuego((Juego) json.get("juego"));
+    	return this;
     }
     
 }

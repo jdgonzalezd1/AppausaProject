@@ -26,6 +26,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.google.gson.Gson;
 
+import net.minidev.json.JSONObject;
+
 /**
  *
  * @author aasanchez
@@ -197,11 +199,29 @@ public class Juego implements Serializable {
 
     @Override
     public String toString() {
-        return "Juego: " + toJson();
+        return "Juego: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,Juego.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("id", this.getId());
+    	json.put("nombre", this.getNombre());
+    	json.put("puntaje", this.getPuntaje());
+    	json.put("mecanica", this.getMecanica());
+    	json.put("urlDescarga", this.getUrlDescarga());
+    	json.put("dispositivo", this.getDispositivo());
+    	json.put("tipoJuego", this.getTipoJuego());
+    	return json;
+    }
+    
+    public Juego fromJson(JSONObject json){
+    	this.setId((Integer) json.getAsNumber("id"));
+    	this.setNombre(json.getAsString("nombre"));
+    	this.setPuntaje((int) json.getAsNumber("puntaje"));
+    	this.setMecanica(json.getAsString("mecanica"));
+    	this.setLinkApp(json.getAsString("linkApp"));
+    	this.setTipoJuego((TipoJuego) json.get("tipoJuego"));
+    	return this;
     }
     
 }

@@ -6,6 +6,8 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -21,6 +23,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.gson.Gson;
+
+import net.minidev.json.JSONObject;
 
 /**
  *
@@ -143,11 +147,29 @@ public class Log implements Serializable {
 
     @Override
     public String toString() {
-        return "Log: " + toJson();
+        return "Log: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,Log.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("id",this.getId());
+    	json.put("fecha",this.getFecha());
+    	json.put("mensaje",this.getMensaje());
+    	json.put("eventoNombre",this.getEventoNombre());
+    	json.put("cuenta",this.getCuenta());
+    	json.put("tipoEvento", this.getTipoEvento());
+    	return json;
+    }
+    
+    public Log fromJson(JSONObject json) throws ParseException {
+    	this.setId((Integer) json.getAsNumber("id"));
+    	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getAsString("fecha"));
+    	this.setFecha(f);
+    	this.setMensaje(json.getAsString("mensaje"));
+    	this.setEventoNombre(json.getAsString("eventoNombre"));
+    	this.setCuenta((Cuenta) json.get("cuenta"));
+    	this.setTipoEvento((TipoEvento) json.get("tipoEvento"));
+    	return this;
     }
     
 }

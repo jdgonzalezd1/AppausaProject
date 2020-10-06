@@ -12,6 +12,8 @@ import javax.persistence.Embeddable;
 
 import com.google.gson.Gson;
 
+import net.minidev.json.JSONObject;
+
 /**
  *
  * @author aasanchez
@@ -77,11 +79,20 @@ public class PartidaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "PartidaPK: " + toJson();
+        return "PartidaPK: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,PartidaPK.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("cuenta", this.getCuenta());
+    	json.put("juego", this.getJuego());
+    	return json;
+    }
+    
+    public PartidaPK fromJson(JSONObject json) {
+    	this.setCuenta((int) json.getAsNumber("cuenta"));
+    	this.setJuego((int) json.getAsNumber("juego"));
+    	return this;
     }
     
 }

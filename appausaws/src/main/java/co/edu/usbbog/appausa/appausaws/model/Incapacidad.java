@@ -6,6 +6,8 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -23,6 +25,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import com.google.gson.Gson;
+
+import net.minidev.json.JSONObject;
 
 /**
  *
@@ -149,11 +153,31 @@ public class Incapacidad implements Serializable {
 
     @Override
     public String toString() {
-        return "Incapacidad: " + toJson();
+        return "Incapacidad: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,Incapacidad.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("cod", this.getCod());
+    	json.put("inicioIncapacidad", this.getInicioIncapacidad());
+    	json.put("finIncapacidad", this.getFinIncapacidad());
+    	json.put("indicaciones", this.getIndicaciones());
+    	json.put("consultaMedica", this.getConsultaMedica().toJson());
+    	json.put("tipoIncapacidad", this.getTipoIncapacidad().toJson());
+    	return json;
     }
+    
+    public Incapacidad fromJson(JSONObject json) throws ParseException {
+    	this.setCod((Integer) json.getAsNumber("cod"));
+    	Date f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getAsString("inicioIncapacidad"));
+    	this.setInicioIncapacidad(f);
+    	f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getAsString("finIncapacidad"));
+    	this.setFinIncapacidad(f);
+    	this.setIndicaciones(json.getAsString("indicaciones"));
+    	this.setConsultaMedica((ConsultaMedica) json.get("consultaMedica"));
+    	this.setTipoIncapacidad((TipoIncapacidad) json.get("tipoIncapácidad"));
+    	return this;
+    }
+    
     
 }

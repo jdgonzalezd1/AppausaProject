@@ -21,6 +21,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.google.gson.Gson;
 
+import net.minidev.json.JSONObject;
+
 /**
  *
  * @author aasanchez
@@ -116,11 +118,22 @@ public class TipoContrato implements Serializable {
 
     @Override
     public String toString() {
-        return "TipoContrato: " + toJson();
+        return "TipoContrato: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,TipoContrato.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("nombre", this.getNombre());
+    	json.put("descrpcion", this.getDescripcion());
+    	//FK
+    	return json;
+    }
+    
+    public TipoContrato fromJson(JSONObject json) {
+    	this.setNombre(json.getAsString("nombre"));
+    	this.setDescripcion(json.getAsString("descrpcion"));
+    	//
+    	return this;
     }
     
 }

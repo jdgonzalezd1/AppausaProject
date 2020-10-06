@@ -6,6 +6,8 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -22,6 +24,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
@@ -269,11 +274,42 @@ public class Empleado implements Serializable {
 
     @Override
     public String toString() {
-        return "Empleado: " + toJson();
+        return "Empleado: " +  toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,Empleado.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("numDocumento", this.getNumDocumento());
+    	json.put("tipoDocumento", this.getTipoDocumento());
+    	json.put("nombres", this.getNombres());
+    	json.put("apellidos", this.getApellidos());
+    	json.put("fechaNacimiento", this.getFechaNacimiento());
+    	json.put("edad", this.getEdad());
+    	json.put("correoElectronico", this.getCorreoElectronico());
+    	json.put("telefono", this.getTelefono());
+    	json.put("direccion", this.getDireccion());
+    	json.put("ciudad", this.getCiudad());
+    	json.put("nacionalidad", this.getNacionalidad());
+    	json.put("cuenta", this.getCuenta().toJson());
+    	//FK
+    	return json;
+    }
+    
+    public Empleado fromJson(JSONObject json) throws JSONException, ParseException {
+    	this.setNumDocumento(json.getInt("numDocumento"));
+    	this.setTipoDocumento(json.getString("tipoDocumento"));
+    	this.setNombres(json.getString("nombres"));
+    	this.setApellidos(json.getString("apellidos"));
+    	Date f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("fechaNacimiento"));
+    	this.setFechaNacimiento(f);
+    	this.setEdad(json.getInt("edad"));
+    	this.setCorreoElectronico(json.getString("correoElectronico"));
+    	this.setTelefono(json.getInt("telefono"));
+    	this.setDireccion(json.getString("direccion"));
+    	this.setCiudad(json.getString("ciudad"));
+    	this.setNacionalidad(json.getString("nacionalidad"));
+    	//this.setCuenta(json.);
+    	return this;
     }
     
 }

@@ -21,6 +21,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.google.gson.Gson;
 
+import net.minidev.json.JSONObject;
+
 /**
  *
  * @author aasanchez
@@ -200,11 +202,29 @@ public class Entidad implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad: " + toJson();
+        return "Entidad: " + toJson().toString();
     }
        
-    public String toJson() {
-    	return new Gson().toJson(this,Entidad.class);
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("nit", this.getNit());
+    	json.put("nombre", this.getNombre());
+    	json.put("tipo", this.getTipo());
+    	json.put("telefono", this.getTelefono());
+    	json.put("direccion", this.getDireccion());
+    	json.put("email", this.getEmail());
+    	//FK
+    	return json;
+    	}
+    
+    public Entidad fromJson(JSONObject json) {
+    	this.setNit(json.getAsString("nit"));
+    	this.setNombre(json.getAsString("nombre"));
+    	this.setTipo(json.getAsString("tipo"));
+    	this.setTelefono((int) json.getAsNumber("telefono"));
+    	this.setDireccion(json.getAsString("direccion"));
+    	this.setEmail(json.getAsString("email"));
+    	return this;
     }
     
 }
