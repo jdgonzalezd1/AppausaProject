@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 /**
@@ -80,11 +82,20 @@ public class AfeccionEmpleadoPK implements Serializable {
 
     @Override
     public String toString() {
-        return "AfeccionEmpleadoPK: " + toJson();
+        return "AfeccionEmpleadoPK: " + toJson().toString();
     }
-       
-    public String toJson() {
-    	return new Gson().toJson(this,AfeccionEmpleadoPK.class);
+    //afeccionMedica, empleado   
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("afeccionMedica", this.getAfeccionMedica());
+    	json.put("empleado", this.getEmpleado());
+    	return json;
+    }
+    
+    public AfeccionEmpleadoPK fromJson(JSONObject json) {
+    	this.setAfeccionMedica(json.getString("afeccionMedica"));
+    	this.setEmpleado(json.getInt("empleado"));
+    	return this;
     }
     
 }

@@ -21,6 +21,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 /**
@@ -138,11 +140,26 @@ public class ContratoLicencia implements Serializable {
 
     @Override
     public String toString() {
-        return "ContratoLicencia: " + toJson();
+        return "ContratoLicencia: " + toJson().toString();
     }
-       
-    public String toJson() {
-    	return new Gson().toJson(this,ContratoLicencia.class);
+       //contratoLicenciaPK, fechaInicio, fechaFin,contrato1,tipoLicencia
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("contratoLicenciaPK", this.getContratoLicenciaPK());
+    	json.put("fechaInicio", this.getFechaInicio());
+    	json.put("fechaFin", this.getFechaFin());
+    	json.put("contrato", this.getContrato1());
+    	json.put("tipoLicencia", this.getTipoLicencia());
+    	return json;    	
+    }
+    
+    public ContratoLicencia fromJson(JSONObject json) {
+    	this.setContratoLicenciaPK((ContratoLicenciaPK) json.get("contratoLicenciaPK"));
+    	this.setFechaInicio((Date) json.get("fechaInicio"));
+    	this.setFechaFin((Date) json.get("fechaFin"));
+    	this.setContrato1((Contrato) json.get("contrato"));
+    	this.setTipoLicencia((TipoLicencia) json.get("tipoLicencia"));
+    	return this;
     }
     
 }

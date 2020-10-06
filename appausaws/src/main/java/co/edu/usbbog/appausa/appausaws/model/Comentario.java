@@ -23,6 +23,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 /**
@@ -147,11 +149,29 @@ public class Comentario implements Serializable {
 
     @Override
     public String toString() {
-        return "Comentario: " + toJson();
+        return "Comentario: " + toJson().toString();
     }
-       
-    public String toJson() {
-    	return new Gson().toJson(this,Comentario.class);
+       //cod,contenido,leido,respuesta,fecha,cuentaEmpleado
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("codigo", this.getCod());
+    	json.put("contenido", this.getContenido());
+    	json.put("leido", this.getLeido());
+    	json.put("respuesta", this.getRespuesta());
+    	json.put("fecha", this.getFecha());
+    	json.put("cuentaEmpleado", this.getCuentaEmpleado());
+    	return json;    	
+    }
+    
+    public Comentario fromJson(JSONObject json) {
+    	this.setCod(json.getInt("codigo"));
+    	this.setContenido(json.getString("contenido"));
+    	this.setLeido((short) json.get("leido"));
+    	this.setRespuesta(json.getString("respuesta"));
+    	this.setFecha((Date) json.get("fecha"));
+    	this.setCuentaEmpleado((Cuenta) json.get("cuentaEmpleado"));
+    	return this;
+    	
     }
     
 }

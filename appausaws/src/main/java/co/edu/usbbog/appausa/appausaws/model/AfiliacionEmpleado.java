@@ -20,6 +20,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 /**
@@ -145,11 +147,28 @@ public class AfiliacionEmpleado implements Serializable {
 
     @Override
     public String toString() {
-        return "AfiliacionEmpleado: " + toJson();
+        return "AfiliacionEmpleado: " + toJson().toString();
     }
-       
-    public String toJson() {
-    	return new Gson().toJson(this,AfiliacionEmpleado.class);
+    //afiliacionEmpleadoPK,tipo,fechaInicio,fechaFin,empleado1,entidad1 
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("afiliacionEmpleadoPK", this.getAfiliacionEmpleadoPK());
+    	json.put("tipo", this.getTipo());
+    	json.put("fechaInicio", this.getFechaInicio());
+    	json.put("fechaFin", this.getFechaFin());
+    	json.put("empleado", this.getEmpleado1());
+    	json.put("entidad", this.getEntidad1());
+    	return json;    	
+    }
+    
+    public AfiliacionEmpleado fromJson(JSONObject json) {
+    	this.setAfiliacionEmpleadoPK((AfiliacionEmpleadoPK) json.get("afiliacionEmpleadoPK"));
+    	this.setTipo(json.getString("tipo"));
+    	this.setFechaInicio((Date) json.get("fechaInicio"));
+    	this.setFechaFin((Date) json.get("fechaFin"));
+    	this.setEmpleado1((Empleado) json.get("empleado"));
+    	this.setEntidad1((Entidad) json.get("entidad"));
+    	return this;
     }
     
 }

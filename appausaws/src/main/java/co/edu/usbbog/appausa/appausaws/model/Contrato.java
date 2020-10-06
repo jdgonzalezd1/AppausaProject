@@ -25,6 +25,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 /**
@@ -234,11 +236,43 @@ public class Contrato implements Serializable {
 
     @Override
     public String toString() {
-        return "Contrato: " + toJson();
+        return "Contrato: " + toJson().toString();
     }
-       
-    public String toJson() {
-    	return new Gson().toJson(this,Contrato.class);
+       //contratoPK,fechaInicio,fechaFin,sueldo,funciones,cargo,representante,empleado1,empresa1,nivelRiesgo,
+    //tipoContrato,afiliacionContratoList,contratoLicenciaList
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("contratoPK", this.getContratoPK());
+    	json.put("fechaInicio", this.getFechaInicio());
+    	json.put("fechaFin", this.getFechaFin());
+    	json.put("sueldo", this.getSueldo());
+    	json.put("funciones", this.getFunciones());
+    	json.put("cargo", this.getCargo());
+    	json.put("representantes", this.getRepresentante());
+    	json.put("empleado", this.getEmpleado1());
+    	json.put("empresa", this.getEmpresa1());
+    	json.put("nivelRiesgo", this.getNivelRiesgo());
+    	json.put("tipoContrato", this.getTipoContrato());
+    	json.put("listaAfiliacionContrato", this.getAfiliacionContratoList());
+    	json.put("listaContratoLicencia", this.getContratoLicenciaList());
+    	return json;
     }
+    
+   public Contrato fromJson(JSONObject json) {
+	   this.setContratoPK((ContratoPK) json.get("contratoPK"));
+	   this.setFechaInicio((Date) json.get("fechaInicio"));
+	   this.setFechaFin((Date) json.get("fechaFin"));
+	   this.setSueldo(json.getLong("sueldo"));
+	   this.setFunciones(json.getString("funciones"));
+	   this.setCargo(json.getString("cargo"));
+	   this.setRepresentante((short) json.get("representantes"));
+	   this.setEmpleado1((Empleado) json.get("empleado"));
+	   this.setEmpresa1((Empresa) json.get("empresa"));
+	   this.setNivelRiesgo((NivelRiesgo) json.get("nivelRiesgo"));
+	   this.setTipoContrato((TipoContrato) json.get("tipoContrato"));
+	   this.setAfiliacionContratoList((List<AfiliacionContrato>) json.get("listaAfiliacionContrato"));
+	   this.setContratoLicenciaList((List<ContratoLicencia>) json.get("listaContratoLicencia"));
+	   return this;
+   }
     
 }
