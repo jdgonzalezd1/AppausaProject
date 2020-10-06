@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 /**
@@ -112,11 +114,24 @@ public class ContratoLicenciaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "ContratoLicenciaPK: " + toJson();
+        return "ContratoLicenciaPK: " + toJson().toString();
     }
-       
-    public String toJson() {
-    	return new Gson().toJson(this,ContratoLicenciaPK.class);
+       //contrato, contratoEmpresa,contratoUsuario,tipoLicencia
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("contrato", this.getContrato());
+    	json.put("contratoEmpresa", this.getContratoEmpresa());
+    	json.put("contratoUsuario", this.getContratoUsuario());
+    	json.put("tipoLicencia", this.getTipoLicencia());
+    	return json;
+    }
+    
+    public ContratoLicenciaPK fromJson(JSONObject json) {
+    	this.setContrato(json.getInt("contrato"));
+    	this.setContratoEmpresa(json.getString("contratoEmpresa"));
+    	this.setContratoUsuario(json.getInt("contratoUsuario"));
+    	this.setTipoLicencia(json.getString("tipoLicencia"));
+    	return this;
     }
     
 }

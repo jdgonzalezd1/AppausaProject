@@ -21,6 +21,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 /**
@@ -138,11 +140,26 @@ public class AfiliacionContrato implements Serializable {
 
     @Override
     public String toString() {
-        return "AfiliacionContrato: " + toJson();
+        return "AfiliacionContrato: " + toJson().toString();
     }
-       
-    public String toJson() {
-    	return new Gson().toJson(this,AfiliacionContrato.class);
+    //afiliacionContratoPK, fechaInicio, fechaFin, contrato, entidad1 
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("afiliacionContratoPK", this.getAfiliacionContratoPK());
+    	json.put("fechaInicio", this.getFechaInicio());
+    	json.put("fechaFin", this.getFechaFin());
+    	json.put("contrato", this.getContrato());
+    	json.put("entidad", this.getEntidad1());
+    	return json;
+    }
+    
+    public AfiliacionContrato fromJson(JSONObject json) {
+    	this.setAfiliacionContratoPK((AfiliacionContratoPK) json.get("afiliacionContratoPK"));
+    	this.setFechaInicio((Date) json.get("fechaInicio"));
+    	this.setFechaFin((Date) json.get("fechaFin"));
+    	this.setContrato((Contrato) json.get("contrato"));
+    	this.setEntidad1((Entidad) json.get("entidad"));    	
+    	return this;
     }
     
 }

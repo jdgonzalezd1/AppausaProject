@@ -22,6 +22,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 /**
@@ -133,11 +135,26 @@ public class AfeccionMedica implements Serializable {
 
     @Override
     public String toString() {
-        return "AfeccionMedica: " + toJson();
+        return "AfeccionMedica: " + toJson().toString();
     }
-       
-    public String toJson() {
-    	return new Gson().toJson(this,AfeccionMedica.class);
+    //nombre, descrip, indicaciones, tipo, afeccionEmpleadoList   
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("nombre", this.getNombre());
+    	json.put("descripcion", this.getDescrip());
+    	json.put("indicaciones", this.getIndicaciones());
+    	json.put("tipo", this.getTipo());
+    	json.put("listaAfeccionEmpleado", this.getAfeccionEmpleadoList());
+    	return json;
+    }
+    
+    public AfeccionMedica fromJson(JSONObject json) {
+    	this.setNombre(json.getString("nombre"));
+    	this.setDescrip(json.getString("descripcion"));
+    	this.setIndicaciones(json.getString("indicaciones"));
+    	this.setTipo((TipoAfeccion) json.get("tipo"));
+    	this.setAfeccionEmpleadoList((List<AfeccionEmpleado>) json.get("listaAfeccionEmpleado"));
+    	return this;
     }
     
 }

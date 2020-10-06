@@ -21,6 +21,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 /**
@@ -203,11 +205,36 @@ public class ConsultaMedica implements Serializable {
 
     @Override
     public String toString() {
-        return "ConsultaMedica: " + toJson();
+        return "ConsultaMedica: " + toJson().toString();
     }
-       
-    public String toJson() {
-    	return new Gson().toJson(this,ConsultaMedica.class);
+       //id, observaciones, fecha, peso, estatura, medico, tipo, incapacidades, empleado, entidad
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("id", this.getId());
+    	json.put("observaciones", this.getObservaciones());
+    	json.put("fecha", this.getFecha());
+    	json.put("peso", this.getPeso());
+    	json.put("estatura", this.getEstatura());
+    	json.put("medico", this.getMedico());
+    	json.put("tipo", this.getTipo());
+    	json.put("incapacidades", this.getIncapacidades());
+    	json.put("empleado", this.getEmpleado());
+    	json.put("entidad", this.getEntidad());
+    	return json;  
+    }
+    
+    public ConsultaMedica fromJson(JSONObject json) {
+    	this.setId(json.getInt("id"));
+    	this.setObservaciones(json.getString("observaciones"));
+    	this.setFecha(json.getString("fecha"));
+    	this.setPeso(json.getString("peso"));
+    	this.setEstatura(json.getString("estatura"));
+    	this.setMedico(json.getString("medico"));
+    	this.setTipo(json.getString("tipo"));
+    	this.setIncapacidades((List<Incapacidad>) json.get("incapacidades"));
+    	this.setEmpleado((Empleado) json.get("empleado"));
+    	this.setEntidad((Entidad) json.get("entidad"));
+    	return this;
     }
     
 }

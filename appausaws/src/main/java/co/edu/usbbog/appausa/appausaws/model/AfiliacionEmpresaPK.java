@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 /**
@@ -80,11 +82,19 @@ public class AfiliacionEmpresaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "AfiliacionEmpresaPK: " + toJson();
+        return "AfiliacionEmpresaPK: " + toJson().toString();
     }
-       
-    public String toJson() {
-    	return new Gson().toJson(this,AfiliacionEmpresaPK.class);
+       //empresa, entidad
+    public JSONObject toJson() {
+    	JSONObject json = new JSONObject();
+    	json.put("empresa", this.getEmpresa());
+    	json.put("entidad", this.getEntidad());
+    	return json;
     }
     
+    public AfiliacionEmpresaPK fromJson(JSONObject json) {
+    	this.setEmpresa(json.getString("empresa"));
+    	this.setEntidad(json.getString("entidad"));
+    	return this;
+    }
 }
