@@ -6,6 +6,8 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -23,7 +25,9 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.google.gson.Gson;
 
-import net.minidev.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -142,15 +146,31 @@ public class TipoJuego implements Serializable {
     	json.put("id", this.getId());
     	json.put("nombre", this.getNombre());
     	json.put("descrpcion", this.getDescripcion());
-    	//FK
+    	JSONArray lista = new JSONArray();
+    	List<Juego> l = this.getJuegos();
+    	int i = 0;
+    	while (l.get(i) != null) {
+    		lista.put(l.get(i).toJson());
+    		i++;
+    	}
+    	json.put("juegos", lista);
     	return json;
     }
     
-    public TipoJuego fromJson(JSONObject json) {
-    	this.setId((Integer) json.getAsNumber("id"));
-    	this.setNombre(json.getAsString("nombre"));
-    	this.setDescripcion(json.getAsString("descrpcion"));
-    	//
+    public TipoJuego fromJson(JSONObject json) throws JSONException, ParseException {
+    	this.setId((Integer) json.getInt("id"));
+    	this.setNombre(json.getString("nombre"));
+    	this.setDescripcion(json.getString("descrpcion"));
+    	ArrayList<Juego> list = new ArrayList<Juego>();     
+    	JSONArray jsonArray = json.getJSONArray("juegos"); 
+    	int i = 0;
+    	while (jsonArray.get(i) != null) {
+    		Juego ae = null;
+    		ae.fromJson((JSONObject) jsonArray.get(i));
+    	    list.add(ae);
+    	    i++;
+    	} 
+    	this.setJuegos(list);
     	return this;
     }
     

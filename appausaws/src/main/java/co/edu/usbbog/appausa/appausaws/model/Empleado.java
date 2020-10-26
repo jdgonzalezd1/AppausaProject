@@ -8,6 +8,7 @@ package co.edu.usbbog.appausa.appausaws.model;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -25,6 +26,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -291,7 +293,30 @@ public class Empleado implements Serializable {
     	json.put("ciudad", this.getCiudad());
     	json.put("nacionalidad", this.getNacionalidad());
     	json.put("cuenta", this.getCuenta().toJson());
-    	//FK
+    	JSONArray lista = new JSONArray();
+    	List<AfiliacionEmpleado> l = getAfiliacionEmpleadoList();
+    	int i = 0;
+    	while (l.get(i) != null) {
+    		lista.put(l.get(i).toJson());
+    		i++;
+    	}
+    	json.put("afiliacionEmpleadoList", lista);
+    	lista = null;
+    	List<ConsultaMedica> l1 = getConsultaMedicaList();
+    	i = 0;
+    	while (l1.get(i) != null) {
+    		lista.put(l1.get(i).toJson());
+    		i++;
+    	}
+    	json.put("consultaMedicaList", lista);
+    	lista = null;
+    	List<AfeccionEmpleado> l2 = getAfeccionEmpleadoList();
+    	i = 0;
+    	while (l2.get(i) != null) {
+    		lista.put(l2.get(i).toJson());
+    		i++;
+    	}
+    	json.put("afeccionEmpleadoList", lista);
     	return json;
     }
     
@@ -308,7 +333,38 @@ public class Empleado implements Serializable {
     	this.setDireccion(json.getString("direccion"));
     	this.setCiudad(json.getString("ciudad"));
     	this.setNacionalidad(json.getString("nacionalidad"));
-    	//this.setCuenta(json.);
+    	Cuenta c = this.getCuenta().fromJson(json.getJSONObject("cuenta"));
+    	this.setCuenta(c);
+    	ArrayList<AfeccionEmpleado> list = new ArrayList<AfeccionEmpleado>();     
+    	JSONArray jsonArray = json.getJSONArray("afeccionEmpleadoList"); 
+    	int i = 0;
+    	while (jsonArray.get(i) != null) {
+    		AfeccionEmpleado ae = null;
+    		ae.fromJson((JSONObject) jsonArray.get(i));
+    	    list.add(ae);
+    	    i++;
+    	   } 
+    	this.setAfeccionEmpleadoList(list);
+    	ArrayList<AfiliacionEmpleado> list1 = new ArrayList<AfiliacionEmpleado>();     
+    	jsonArray = json.getJSONArray("afiliacionEmpleadoList"); 
+    	i = 0;
+    	while (jsonArray.get(i) != null) {
+    		AfiliacionEmpleado ae = null;
+    		ae.fromJson((JSONObject) jsonArray.get(i));
+    	    list1.add(ae);
+    	    i++;
+    	   } 
+    	this.setAfiliacionEmpleadoList(list1);
+    	ArrayList<ConsultaMedica> list2 = new ArrayList<ConsultaMedica>();     
+    	jsonArray = json.getJSONArray("consultaMedicaList"); 
+    	i = 0;
+    	while (jsonArray.get(i) != null) {
+    		ConsultaMedica ae = null;
+    		ae.fromJson((JSONObject) jsonArray.get(i));
+    	    list2.add(ae);
+    	    i++;
+    	   } 
+    	this.setConsultaMedicaList(list2);
     	return this;
     }
     

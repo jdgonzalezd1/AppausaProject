@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -30,6 +31,7 @@ import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -284,7 +286,39 @@ public class Cuenta implements Serializable {
     	json.put("puntajeMes", this.getPuntajeMes());
     	json.put("tiempoTotal", this.getTiempoTotal());
     	json.put("tiempoMes", this.getTiempoMes());
-    	//FKS
+    	json.put("empleado1", this.getEmpleado1().toJson());
+    	JSONArray lista = new JSONArray();
+    	List<Rol> l = getRoles();
+    	int i = 0;
+    	while (l.get(i) != null) {
+    		lista.put(l.get(i).toJson());
+    		i++;
+    	}
+    	json.put("roles", lista);
+    	lista = null;
+    	List<Log> l1 = getLogs();
+    	i = 0;
+    	while (l1.get(i) != null) {
+    		lista.put(l1.get(i).toJson());
+    		i++;
+    	}
+    	json.put("logs", lista);
+    	lista = null;
+    	List<Comentario> l2 = getComentarioList();
+    	i = 0;
+    	while (l2.get(i) != null) {
+    		lista.put(l2.get(i).toJson());
+    		i++;
+    	}
+    	json.put("comentarios", lista);
+    	lista = null;
+    	List<Partida> l3 = getPartidas();
+    	i = 0;
+    	while (l3.get(i) != null) {
+    		lista.put(l3.get(i).toJson());
+    		i++;
+    	}
+    	json.put("partidas", lista);
     	return json;
     }
     
@@ -300,6 +334,37 @@ public class Cuenta implements Serializable {
     	this.setTiempoTotal(f);
     	f = new SimpleDateFormat("HH:mm:ss").parse(json.getString("tiemnpoMes"));
     	this.setTiempoMes(f);
+   		ArrayList<Rol> list = new ArrayList<Rol>();     
+   		JSONArray jsonArray = json.getJSONArray("roles"); 
+   		int i = 0;
+   		while (jsonArray.get(i) != null) {
+   			Rol ae = null;
+   			ae.fromJson((JSONObject) jsonArray.get(i));
+   			list.add(ae);
+   			i++;
+   	   }
+   		this.setRoles(list);
+   		jsonArray = null;
+   		ArrayList<Log> list1 = new ArrayList<Log>();     
+   		jsonArray = json.getJSONArray("logs"); 
+   		i = 0;
+   		while (jsonArray.get(i) != null) {
+   			Rol ae = null;
+   			ae.fromJson((JSONObject) jsonArray.get(i));
+   			list.add(ae);
+   			i++;
+   	   }
+   		this.setLogs(list1);
+   		jsonArray = null;
+   		ArrayList<Comentario> list2 = new ArrayList<Comentario>();     
+   		jsonArray = json.getJSONArray("logs"); 
+   		i = 0;
+   		while (jsonArray.get(i) != null) {
+   			Rol ae = null;
+   			ae.fromJson((JSONObject) jsonArray.get(i));
+   			list.add(ae);
+   			i++;
+   	   }
     	return this;
     }
     

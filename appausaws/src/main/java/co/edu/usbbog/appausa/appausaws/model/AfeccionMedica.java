@@ -6,7 +6,14 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,9 +29,10 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.json.JSONObject;
+import org.json.*;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 /**
  *
@@ -143,17 +151,35 @@ public class AfeccionMedica implements Serializable {
     	json.put("nombre", this.getNombre());
     	json.put("descripcion", this.getDescrip());
     	json.put("indicaciones", this.getIndicaciones());
-    	json.put("tipo", this.getTipo());
-    	json.put("listaAfeccionEmpleado", this.getAfeccionEmpleadoList());
+    	json.put("tipo", this.getTipo().toJson());
+    	JSONArray lista = new JSONArray();
+    	List<AfeccionEmpleado> l = getAfeccionEmpleadoList();
+    	int i = 0;
+    	while (l.get(i) != null) {
+    		JSONObject obj = l.get(i).toJson();
+    		lista.put(obj);
+    		i++;
+    	}
+    	json.put("listaAfeccionEmpleado", lista);
     	return json;
     }
     
-    public AfeccionMedica fromJson(JSONObject json) {
+    public AfeccionMedica fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setNombre(json.getString("nombre"));
     	this.setDescrip(json.getString("descripcion"));
     	this.setIndicaciones(json.getString("indicaciones"));
-    	this.setTipo((TipoAfeccion) json.get("tipo"));
-    	this.setAfeccionEmpleadoList((List<AfeccionEmpleado>) json.get("listaAfeccionEmpleado"));
+    	TipoAfeccion ta = this.getTipo().fromJson(json.getJSONObject("tipo"));
+    	this.setTipo(ta);
+    	ArrayList<AfeccionEmpleado> list = new ArrayList<AfeccionEmpleado>();     
+    	JSONArray jsonArray = json.getJSONArray("listaAfeccionEmpleado"); 
+    	int i = 0;
+    	while (jsonArray.get(i) != null) {
+    		AfeccionEmpleado ae = null;
+    		ae.fromJson((JSONObject) jsonArray.get(i));
+    	    list.add(ae);
+    	    i++;
+    	   } 
+    	this.setAfeccionEmpleadoList(list);
     	return this;
     }
     

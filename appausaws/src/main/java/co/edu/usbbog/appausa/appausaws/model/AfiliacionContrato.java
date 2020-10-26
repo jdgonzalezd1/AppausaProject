@@ -6,6 +6,8 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -21,6 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
@@ -145,20 +148,25 @@ public class AfiliacionContrato implements Serializable {
     //afiliacionContratoPK, fechaInicio, fechaFin, contrato, entidad1 
     public JSONObject toJson() {
     	JSONObject json = new JSONObject();
-    	json.put("afiliacionContratoPK", this.getAfiliacionContratoPK());
+    	json.put("afiliacionContratoPK", this.getAfiliacionContratoPK().toJson());
     	json.put("fechaInicio", this.getFechaInicio());
     	json.put("fechaFin", this.getFechaFin());
-    	json.put("contrato", this.getContrato());
-    	json.put("entidad", this.getEntidad1());
+    	json.put("contrato", this.getContrato().toJson());
+    	json.put("entidad", this.getEntidad1().toJson());
     	return json;
     }
     
-    public AfiliacionContrato fromJson(JSONObject json) {
-    	this.setAfiliacionContratoPK((AfiliacionContratoPK) json.get("afiliacionContratoPK"));
-    	this.setFechaInicio((Date) json.get("fechaInicio"));
-    	this.setFechaFin((Date) json.get("fechaFin"));
-    	this.setContrato((Contrato) json.get("contrato"));
-    	this.setEntidad1((Entidad) json.get("entidad"));    	
+    public AfiliacionContrato fromJson(JSONObject json) throws JSONException, ParseException {
+    	AfiliacionContratoPK pk = this.getAfiliacionContratoPK().fromJson(json.getJSONObject("afiliacionContratoPK"));
+    	this.setAfiliacionContratoPK(pk);
+    	Date f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("fechaInicio"));
+    	this.setFechaInicio(f);
+    	f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("fechaFin"));
+    	this.setFechaFin(f);
+    	Contrato c = this.getContrato().fromJson(json.getJSONObject("contrato"));
+    	this.setContrato(c);
+    	Entidad e  = this.getEntidad1().fromJson(json.getJSONObject("entidad"));
+    	this.setEntidad1(e);    	
     	return this;
     }
     

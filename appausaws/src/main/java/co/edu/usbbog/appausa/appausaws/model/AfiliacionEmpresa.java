@@ -6,6 +6,8 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -20,6 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
@@ -139,20 +142,24 @@ public class AfiliacionEmpresa implements Serializable {
        //afiliacionEmpresaPK,fechaInicio,fechaFin,empresa1,entidad1
     public JSONObject toJson() {
     	JSONObject json = new JSONObject();
-    	json.put("afiliacionEmpresaPK", this.getAfiliacionEmpresaPK());
+    	json.put("afiliacionEmpresaPK", this.getAfiliacionEmpresaPK().toJson());
     	json.put("fechaInicio", this.getFechaInicio());
     	json.put("fechaFin", this.getFechaFin());
-    	json.put("empresa", this.getEmpresa1());
-    	json.put("entidad", this.getEntidad1());
+    	json.put("empresa", this.getEmpresa1().toJson());
+    	json.put("entidad", this.getEntidad1().toJson());
     	return json;
     }
     
-    public AfiliacionEmpresa fromJson(JSONObject json) {
+    public AfiliacionEmpresa fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setAfiliacionEmpresaPK((AfiliacionEmpresaPK) json.get("afiliacionEmpresaPK"));
-    	this.setFechaInicio((Date) json.get("fechaInicio"));
-    	this.setFechaFin((Date) json.get("fechaFin"));
-    	this.setEmpresa1((Empresa) json.get("empresa"));
-    	this.setEntidad1((Entidad) json.get("entidad"));
+    	Date f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("fechaInicio"));
+    	this.setFechaInicio(f);
+    	f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("fechaFin"));
+    	this.setFechaFin(f);
+    	Empresa em = this.getEmpresa1().fromJson(json.getJSONObject("empresa"));
+    	this.setEmpresa1(em);
+    	Entidad en = this.getEntidad1().fromJson(json.getJSONObject("entidad"));
+    	this.setEntidad1(en);
     	return this;
     }
     

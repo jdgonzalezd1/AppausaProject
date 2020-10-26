@@ -6,6 +6,10 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -21,6 +25,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
@@ -217,23 +223,40 @@ public class ConsultaMedica implements Serializable {
     	json.put("estatura", this.getEstatura());
     	json.put("medico", this.getMedico());
     	json.put("tipo", this.getTipo());
-    	json.put("incapacidades", this.getIncapacidades());
-    	json.put("empleado", this.getEmpleado());
-    	json.put("entidad", this.getEntidad());
+    	JSONArray lista = new JSONArray();
+    	List<Incapacidad> l = this.getIncapacidades();
+    	int i = 0;
+    	while (l.get(i) != null) {
+    		lista.put(l.get(i).toJson());
+    		i++;
+    	}
+    	json.put("incapacidades", lista);
+    	json.put("empleado", this.getEmpleado().toJson());
+    	json.put("entidad", this.getEntidad().toJson());
     	return json;  
     }
     
-    public ConsultaMedica fromJson(JSONObject json) {
+    public ConsultaMedica fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setId(json.getInt("id"));
-    	this.setObservaciones(json.getString("observaciones"));
     	this.setFecha(json.getString("fecha"));
     	this.setPeso(json.getString("peso"));
     	this.setEstatura(json.getString("estatura"));
     	this.setMedico(json.getString("medico"));
     	this.setTipo(json.getString("tipo"));
-    	this.setIncapacidades((List<Incapacidad>) json.get("incapacidades"));
-    	this.setEmpleado((Empleado) json.get("empleado"));
-    	this.setEntidad((Entidad) json.get("entidad"));
+    	ArrayList<Incapacidad> list = new ArrayList<Incapacidad>();     
+    	JSONArray jsonArray = json.getJSONArray("incapacidades"); 
+    	int i = 0;
+    	while (jsonArray.get(i) != null) {
+    		Incapacidad ae = null;
+    		ae.fromJson((JSONObject) jsonArray.get(i));
+    	    list.add(ae);
+    	    i++;
+    	   } 
+    	this.setIncapacidades(list);
+    	Empleado em = this.getEmpleado().fromJson(json.getJSONObject("empleado"));
+    	this.setEmpleado(em);
+    	Entidad en = this.getEntidad().fromJson(json.getJSONObject("entidad"));
+    	this.setEntidad(en);
     	return this;
     }
     

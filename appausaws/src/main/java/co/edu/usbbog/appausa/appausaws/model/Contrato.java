@@ -6,6 +6,9 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -25,6 +28,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
@@ -242,36 +247,76 @@ public class Contrato implements Serializable {
     //tipoContrato,afiliacionContratoList,contratoLicenciaList
     public JSONObject toJson() {
     	JSONObject json = new JSONObject();
-    	json.put("contratoPK", this.getContratoPK());
+    	json.put("contratoPK", this.getContratoPK().toJson());
     	json.put("fechaInicio", this.getFechaInicio());
     	json.put("fechaFin", this.getFechaFin());
     	json.put("sueldo", this.getSueldo());
     	json.put("funciones", this.getFunciones());
     	json.put("cargo", this.getCargo());
     	json.put("representantes", this.getRepresentante());
-    	json.put("empleado", this.getEmpleado1());
-    	json.put("empresa", this.getEmpresa1());
-    	json.put("nivelRiesgo", this.getNivelRiesgo());
-    	json.put("tipoContrato", this.getTipoContrato());
-    	json.put("listaAfiliacionContrato", this.getAfiliacionContratoList());
-    	json.put("listaContratoLicencia", this.getContratoLicenciaList());
+    	json.put("empleado", this.getEmpleado1().toJson());
+    	json.put("empresa", this.getEmpresa1().toJson());
+    	json.put("nivelRiesgo", this.getNivelRiesgo().toJson());
+    	json.put("tipoContrato", this.getTipoContrato().toJson());
+    	JSONArray lista = new JSONArray();
+    	List<AfiliacionContrato> l = getAfiliacionContratoList();
+    	int i = 0;
+    	while (l.get(i) != null) {
+    		lista.put(l.get(i).toJson());
+    		i++;
+    	}
+    	json.put("listaAfiliacionContrato", lista);
+    	lista = null;
+    	List<ContratoLicencia> l1 = getContratoLicenciaList();
+    	i = 0;
+    	while (l1.get(i) != null) {
+    		lista.put(l.get(i).toJson());
+    		i++;
+    	}
+    	json.put("listaContratoLicencia", lista);
     	return json;
     }
     
-   public Contrato fromJson(JSONObject json) {
-	   this.setContratoPK((ContratoPK) json.get("contratoPK"));
-	   this.setFechaInicio((Date) json.get("fechaInicio"));
-	   this.setFechaFin((Date) json.get("fechaFin"));
+   public Contrato fromJson(JSONObject json) throws JSONException, ParseException {
+	   ContratoPK pk = this.getContratoPK().fromJson(json.getJSONObject("contratoPK"));
+	   this.setContratoPK(pk);
+	   Date f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("fechaInicio"));
+	   this.setFechaInicio(f);
+	   f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("fechaFin"));
+	   this.setFechaFin(f);
 	   this.setSueldo(json.getLong("sueldo"));
 	   this.setFunciones(json.getString("funciones"));
 	   this.setCargo(json.getString("cargo"));
 	   this.setRepresentante((short) json.get("representantes"));
-	   this.setEmpleado1((Empleado) json.get("empleado"));
+	   Empleado emp = this.getEmpleado1().fromJson(json.getJSONObject("empleado"));
+	   this.setEmpleado1(emp);
+	   Empresa em = this.getEmpresa1().fromJson(json.getJSONObject("empresa"));
 	   this.setEmpresa1((Empresa) json.get("empresa"));
-	   this.setNivelRiesgo((NivelRiesgo) json.get("nivelRiesgo"));
-	   this.setTipoContrato((TipoContrato) json.get("tipoContrato"));
-	   this.setAfiliacionContratoList((List<AfiliacionContrato>) json.get("listaAfiliacionContrato"));
-	   this.setContratoLicenciaList((List<ContratoLicencia>) json.get("listaContratoLicencia"));
+	   NivelRiesgo nr = this.getNivelRiesgo().fromJson(json.getJSONObject("nivelRiesgo"));
+	   this.setNivelRiesgo(nr);
+	   TipoContrato tp = this.getTipoContrato().fromJson(json.getJSONObject("tipoContrato"));
+	   this.setTipoContrato(tp);
+   		ArrayList<AfiliacionContrato> list = new ArrayList<AfiliacionContrato>();     
+   		JSONArray jsonArray = json.getJSONArray("listaAfiliacionContrato"); 
+   		int i = 0;
+   		while (jsonArray.get(i) != null) {
+   			AfiliacionContrato ae = null;
+   			ae.fromJson((JSONObject) jsonArray.get(i));
+   			list.add(ae);
+   			i++;
+   	   } 
+	   this.setAfiliacionContratoList(list);
+	   jsonArray = null;
+  		ArrayList<ContratoLicencia> list2 = new ArrayList<ContratoLicencia>();     
+  		jsonArray = json.getJSONArray("listaContratoLicencia"); 
+  		i = 0;
+  		while (jsonArray.get(i) != null) {
+  			ContratoLicencia ae = null;
+  			ae.fromJson((JSONObject) jsonArray.get(i));
+  			list2.add(ae);
+  			i++;
+  	   } 
+	   this.setContratoLicenciaList(list2);
 	   return this;
    }
     

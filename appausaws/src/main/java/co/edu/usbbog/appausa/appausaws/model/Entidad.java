@@ -6,6 +6,8 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -19,9 +21,12 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import com.google.gson.Gson;
 
-import net.minidev.json.JSONObject;
+import org.json.JSONObject;
 
 /**
  *
@@ -213,18 +218,93 @@ public class Entidad implements Serializable {
     	json.put("telefono", this.getTelefono());
     	json.put("direccion", this.getDireccion());
     	json.put("email", this.getEmail());
-    	//FK
+    	JSONArray lista = new JSONArray();
+    	List<AfeccionEmpleado> l = this.getAfeccionEmpleadoList();
+    	int i = 0;
+    	while (l.get(i) != null) {
+    		lista.put(l.get(i).toJson());
+    		i++;
+    	}
+    	json.put("afeccionEmpleadoList", lista);
+    	lista = new JSONArray();
+    	List<AfiliacionContrato> l1 = this.getAfiliacionContratoList();
+    	i = 0;
+    	while (l1.get(i) != null) {
+    		lista.put(l1.get(i).toJson());
+    		i++;
+    	}
+    	json.put("afiliacionContratoList", lista);
+    	lista = new JSONArray();
+    	List<AfiliacionEmpleado> l2 = this.getAfiliacionEmpleadoList();
+    	i = 0;
+    	while (l2.get(i) != null) {
+    		lista.put(l2.get(i).toJson());
+    		i++;
+    	}
+    	json.put("afiliacionEmpleadoList", lista);
+    	lista = new JSONArray();
+    	List<AfiliacionEmpresa> l3 = this.getAfiliacionEmpresaList();
+    	i = 0;
+    	while (l3.get(i) != null) {
+    		lista.put(l3.get(i).toJson());
+    		i++;
+    	}
+    	json.put("afiliacionEmpresaList", lista);
     	return json;
     	}
     
-    public Entidad fromJson(JSONObject json) {
-    	this.setNit(json.getAsString("nit"));
-    	this.setNombre(json.getAsString("nombre"));
-    	this.setTipo(json.getAsString("tipo"));
-    	this.setTelefono((int) json.getAsNumber("telefono"));
-    	this.setDireccion(json.getAsString("direccion"));
-    	this.setEmail(json.getAsString("email"));
+    public Entidad fromJson(JSONObject json) throws JSONException, ParseException{
+    	this.setNit(json.getString("nit"));
+    	this.setNombre(json.getString("nombre"));
+    	this.setTipo(json.getString("tipo"));
+    	this.setTelefono(json.getInt("telefono"));
+    	this.setDireccion(json.getString("direccion"));
+    	this.setEmail(json.getString("email"));
+    	ArrayList<AfeccionEmpleado> list = new ArrayList<AfeccionEmpleado>();     
+    	JSONArray jsonArray = json.getJSONArray("afeccionEmpleadoList"); 
+    	int i = 0;
+    	while (jsonArray.get(i) != null) {
+    		AfeccionEmpleado ae = null;
+    		ae.fromJson((JSONObject) jsonArray.get(i));
+    	    list.add(ae);
+    	    i++;
+    	} 
+    	this.setAfeccionEmpleadoList(list);
+    	jsonArray = null;
+    	ArrayList<AfiliacionContrato> list1 = new ArrayList<AfiliacionContrato>();     
+    	jsonArray = json.getJSONArray("afiliacionContratoList"); 
+    	i = 0;
+    	while (jsonArray.get(i) != null) {
+    		AfiliacionContrato ae = null;
+    		ae.fromJson((JSONObject) jsonArray.get(i));
+    	    list1.add(ae);
+    	    i++;
+    	   } 
+    	this.setAfiliacionContratoList(list1);
+    	jsonArray = null;
+    	ArrayList<AfiliacionEmpleado> list2 = new ArrayList<AfiliacionEmpleado>();     
+    	jsonArray = json.getJSONArray("afiliacionEmpleadoList"); 
+    	i = 0;
+    	while (jsonArray.get(i) != null) {
+    		AfiliacionEmpleado ae = null;
+    		ae.fromJson((JSONObject) jsonArray.get(i));
+    	    list2.add(ae);
+    	    i++;
+    	   } 
+    	this.setAfiliacionEmpleadoList(list2);
+    	jsonArray = null;
+    	ArrayList<AfiliacionEmpresa> list3 = new ArrayList<AfiliacionEmpresa>();     
+    	jsonArray = json.getJSONArray("afiliacionEmpleadoList"); 
+    	i = 0;
+    	while (jsonArray.get(i) != null) {
+    		AfiliacionEmpresa ae = null;
+    		ae.fromJson((JSONObject) jsonArray.get(i));
+    	    list3.add(ae);
+    	    i++;
+    	   } 
+    	this.setAfiliacionEmpresaList(list3);
     	return this;
     }
+
     
 }

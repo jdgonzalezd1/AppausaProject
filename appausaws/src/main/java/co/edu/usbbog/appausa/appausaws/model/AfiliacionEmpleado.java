@@ -6,6 +6,7 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -20,6 +21,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
@@ -152,22 +154,25 @@ public class AfiliacionEmpleado implements Serializable {
     //afiliacionEmpleadoPK,tipo,fechaInicio,fechaFin,empleado1,entidad1 
     public JSONObject toJson() {
     	JSONObject json = new JSONObject();
-    	json.put("afiliacionEmpleadoPK", this.getAfiliacionEmpleadoPK());
+    	json.put("afiliacionEmpleadoPK", this.getAfiliacionEmpleadoPK().toJson());
     	json.put("tipo", this.getTipo());
     	json.put("fechaInicio", this.getFechaInicio());
     	json.put("fechaFin", this.getFechaFin());
-    	json.put("empleado", this.getEmpleado1());
-    	json.put("entidad", this.getEntidad1());
+    	json.put("empleado", this.getEmpleado1().toJson());
+    	json.put("entidad", this.getEntidad1().toJson());
     	return json;    	
     }
     
-    public AfiliacionEmpleado fromJson(JSONObject json) {
-    	this.setAfiliacionEmpleadoPK((AfiliacionEmpleadoPK) json.get("afiliacionEmpleadoPK"));
+    public AfiliacionEmpleado fromJson(JSONObject json) throws JSONException, ParseException {
+    	AfiliacionEmpleadoPK pk = this.getAfiliacionEmpleadoPK().fromJson(json.getJSONObject("afiliacionEmpleadoPK"));
+    	this.setAfiliacionEmpleadoPK(pk);
     	this.setTipo(json.getString("tipo"));
     	this.setFechaInicio((Date) json.get("fechaInicio"));
     	this.setFechaFin((Date) json.get("fechaFin"));
+    	Empleado e = this.getEmpleado1().fromJson(json.getJSONObject("empleado"));
     	this.setEmpleado1((Empleado) json.get("empleado"));
-    	this.setEntidad1((Entidad) json.get("entidad"));
+    	Entidad en = this.getEntidad1().fromJson(json.getJSONObject("entidad"));
+    	this.setEntidad1(en);
     	return this;
     }
     

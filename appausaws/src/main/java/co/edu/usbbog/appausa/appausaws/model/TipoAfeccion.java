@@ -6,6 +6,8 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -20,7 +22,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import com.google.gson.Gson;
 
-import net.minidev.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -124,14 +128,29 @@ public class TipoAfeccion implements Serializable {
     	JSONObject json = new JSONObject();
     	json.put("nombre", this.getNombre());
     	json.put("descrpcion", this.getDescripcion());
-    	//FK
+    	JSONArray lista = new JSONArray();
+    	List<AfeccionMedica> l = this.getAfeccionesMedicas();
+    	int i = 0;
+    	while (l.get(i) != null) {
+    		lista.put(l.get(i).toJson());
+    		i++;
+    	}
+    	json.put("afeccionesMedicas", lista);
     	return json;
     }
     
-    public TipoAfeccion fromJson(JSONObject json) {
-    	this.setNombre(json.getAsString("nombre"));
-    	this.setDescripcion(json.getAsString("descrpcion"));
-    	//
+    public TipoAfeccion fromJson(JSONObject json) throws JSONException, ParseException {
+    	this.setNombre(json.getString("nombre"));
+    	this.setDescripcion(json.getString("descrpcion"));
+    	ArrayList<AfeccionMedica> list = new ArrayList<AfeccionMedica>();     
+    	JSONArray jsonArray = json.getJSONArray("afeccionesMedicas"); 
+    	int i = 0;
+    	while (jsonArray.get(i) != null) {
+    		AfeccionMedica ae = null;
+    		ae.fromJson((JSONObject) jsonArray.get(i));
+    	    list.add(ae);
+    	   } 
+    	this.setAfeccionesMedicas(list);
     	return this;
     }
 }

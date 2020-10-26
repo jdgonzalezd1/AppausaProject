@@ -6,6 +6,8 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -20,7 +22,9 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.google.gson.Gson;
 
-import net.minidev.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -112,14 +116,30 @@ public class Rol implements Serializable {
     	JSONObject json = new JSONObject();
     	json.put("nombre", this.getNombre());
     	json.put("descrpcion", this.getDescrpcion());
-    	//FK
+    	JSONArray lista = new JSONArray();
+    	List<Cuenta> l = this.getCuentas();
+    	int i = 0;
+    	while (l.get(i) != null) {
+    		lista.put(l.get(i).toJson());
+    		i++;
+    	}
+    	json.put("cuentas", lista);
     	return json;
     }
     
-    public Rol fromJson(JSONObject json) {
-    	this.setNombre(json.getAsString("nombre"));
-    	this.setDescrpcion(json.getAsString("descrpcion"));
-    	//
+    public Rol fromJson(JSONObject json) throws JSONException, ParseException {
+    	this.setNombre(json.getString("nombre"));
+    	this.setDescrpcion(json.getString("descrpcion"));
+    	ArrayList<Cuenta> list = new ArrayList<Cuenta>();     
+    	JSONArray jsonArray = json.getJSONArray("cuentas"); 
+    	int i = 0;
+    	while (jsonArray.get(i) != null) {
+    		Cuenta ae = null;
+    		ae.fromJson((JSONObject) jsonArray.get(i));
+    	    list.add(ae);
+    	    i++;
+    	} 
+    	this.setCuentas(list);
     	return this;
     }
     

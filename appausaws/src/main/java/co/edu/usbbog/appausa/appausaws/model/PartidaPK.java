@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
 
 import com.google.gson.Gson;
 
-import net.minidev.json.JSONObject;
+import org.json.JSONObject;
 
 /**
  *
@@ -90,8 +90,8 @@ public class PartidaPK implements Serializable {
     }
     
     public PartidaPK fromJson(JSONObject json) {
-    	this.setCuenta((int) json.getAsNumber("cuenta"));
-    	this.setJuego((int) json.getAsNumber("juego"));
+    	this.setCuenta((int) json.getInt("cuenta"));
+    	this.setJuego((int) json.getInt("juego"));
     	return this;
     }
     

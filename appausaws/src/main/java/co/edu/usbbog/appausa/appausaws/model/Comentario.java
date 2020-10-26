@@ -6,6 +6,9 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -23,6 +26,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
@@ -159,17 +164,19 @@ public class Comentario implements Serializable {
     	json.put("leido", this.getLeido());
     	json.put("respuesta", this.getRespuesta());
     	json.put("fecha", this.getFecha());
-    	json.put("cuentaEmpleado", this.getCuentaEmpleado());
+    	json.put("cuentaEmpleado", this.getCuentaEmpleado().toJson());
     	return json;    	
     }
     
-    public Comentario fromJson(JSONObject json) {
+    public Comentario fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setCod(json.getInt("codigo"));
     	this.setContenido(json.getString("contenido"));
     	this.setLeido((short) json.get("leido"));
     	this.setRespuesta(json.getString("respuesta"));
-    	this.setFecha((Date) json.get("fecha"));
-    	this.setCuentaEmpleado((Cuenta) json.get("cuentaEmpleado"));
+    	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getString("fecha"));
+    	this.setFecha(f);
+    	Cuenta c = this.getCuentaEmpleado().fromJson(json.getJSONObject("cuentaEmpleado"));
+    	this.setCuentaEmpleado(c);
     	return this;
     	
     }
