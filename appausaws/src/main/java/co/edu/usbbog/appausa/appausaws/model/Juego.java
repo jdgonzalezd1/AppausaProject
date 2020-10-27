@@ -222,6 +222,7 @@ public class Juego implements Serializable {
     	this.setLinkApp(json.getAsString("linkApp"));
     	this.setTipoJuego((TipoJuego) json.get("tipoJuego"));
 <<<<<<< HEAD
+<<<<<<< HEAD
     	ArrayList<Partida> list = new ArrayList<Partida>();     
     	JSONArray jsonArray = json.getJSONArray("partidas"); 
     	int i = 0;
@@ -232,6 +233,8 @@ public class Juego implements Serializable {
     	    i++;
     	} 
     	this.setPartidas(list);
+=======
+>>>>>>> parent of 4ce73e8... FKS, List
 =======
 >>>>>>> parent of 4ce73e8... FKS, List
     	return this;

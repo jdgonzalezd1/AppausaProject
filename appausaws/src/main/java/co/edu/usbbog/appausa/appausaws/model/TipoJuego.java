@@ -147,6 +147,7 @@ public class TipoJuego implements Serializable {
     }
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     public TipoJuego fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setId((Integer) json.getInt("id"));
     	this.setNombre(json.getString("nombre"));
@@ -162,11 +163,16 @@ public class TipoJuego implements Serializable {
     	} 
     	this.setJuegos(list);
 =======
+=======
+>>>>>>> parent of 4ce73e8... FKS, List
     public TipoJuego fromJson(JSONObject json) {
     	this.setId((Integer) json.getAsNumber("id"));
     	this.setNombre(json.getAsString("nombre"));
     	this.setDescripcion(json.getAsString("descrpcion"));
     	//
+<<<<<<< HEAD
+>>>>>>> parent of 4ce73e8... FKS, List
+=======
 >>>>>>> parent of 4ce73e8... FKS, List
     	return this;
     }

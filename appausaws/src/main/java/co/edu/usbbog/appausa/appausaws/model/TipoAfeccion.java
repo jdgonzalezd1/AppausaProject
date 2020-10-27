@@ -129,6 +129,7 @@ public class TipoAfeccion implements Serializable {
     }
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     public TipoAfeccion fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setNombre(json.getString("nombre"));
     	this.setDescripcion(json.getString("descrpcion"));
@@ -142,10 +143,15 @@ public class TipoAfeccion implements Serializable {
     	   } 
     	this.setAfeccionesMedicas(list);
 =======
+=======
+>>>>>>> parent of 4ce73e8... FKS, List
     public TipoAfeccion fromJson(JSONObject json) {
     	this.setNombre(json.getAsString("nombre"));
     	this.setDescripcion(json.getAsString("descrpcion"));
     	//
+<<<<<<< HEAD
+>>>>>>> parent of 4ce73e8... FKS, List
+=======
 >>>>>>> parent of 4ce73e8... FKS, List
     	return this;
     }

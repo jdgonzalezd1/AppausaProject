@@ -237,6 +237,7 @@ public class Empresa implements Serializable {
     	this.setNumEmpleados(json.getInt("numEmpleados"));
     	this.setNombre(json.getString("tipo"));
 <<<<<<< HEAD
+<<<<<<< HEAD
     	ArrayList<AfiliacionEmpresa> list = new ArrayList<AfiliacionEmpresa>();     
     	JSONArray jsonArray = json.getJSONArray("afiliacionEmpresaist"); 
     	int i = 0;
@@ -257,6 +258,8 @@ public class Empresa implements Serializable {
     	    i++;
     	   } 
     	this.setContratoList(list1);
+=======
+>>>>>>> parent of 4ce73e8... FKS, List
 =======
 >>>>>>> parent of 4ce73e8... FKS, List
     	return this;

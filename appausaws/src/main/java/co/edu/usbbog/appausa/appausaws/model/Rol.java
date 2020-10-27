@@ -117,6 +117,7 @@ public class Rol implements Serializable {
     }
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     public Rol fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setNombre(json.getString("nombre"));
     	this.setDescrpcion(json.getString("descrpcion"));
@@ -132,10 +133,15 @@ public class Rol implements Serializable {
     	} 
     	this.setCuentas(list);
 =======
+=======
+>>>>>>> parent of 4ce73e8... FKS, List
     public Rol fromJson(JSONObject json) {
     	this.setNombre(json.getAsString("nombre"));
     	this.setDescrpcion(json.getAsString("descrpcion"));
     	//
+<<<<<<< HEAD
+>>>>>>> parent of 4ce73e8... FKS, List
+=======
 >>>>>>> parent of 4ce73e8... FKS, List
     	return this;
     }

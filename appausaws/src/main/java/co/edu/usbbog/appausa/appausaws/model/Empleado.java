@@ -309,6 +309,7 @@ public class Empleado implements Serializable {
     	this.setCiudad(json.getString("ciudad"));
     	this.setNacionalidad(json.getString("nacionalidad"));
 <<<<<<< HEAD
+<<<<<<< HEAD
     	Cuenta c = this.getCuenta().fromJson(json.getJSONObject("cuenta"));
     	this.setCuenta(c);
     	ArrayList<AfeccionEmpleado> list = new ArrayList<AfeccionEmpleado>();     
@@ -341,6 +342,9 @@ public class Empleado implements Serializable {
     	    i++;
     	   } 
     	this.setConsultaMedicaList(list2);
+=======
+    	//this.setCuenta(json.);
+>>>>>>> parent of 4ce73e8... FKS, List
 =======
     	//this.setCuenta(json.);
 >>>>>>> parent of 4ce73e8... FKS, List

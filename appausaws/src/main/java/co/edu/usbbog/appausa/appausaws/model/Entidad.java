@@ -218,6 +218,7 @@ public class Entidad implements Serializable {
     	}
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     public Entidad fromJson(JSONObject json) throws JSONException, ParseException{
     	this.setNit(json.getString("nit"));
     	this.setNombre(json.getString("nombre"));
@@ -269,6 +270,8 @@ public class Entidad implements Serializable {
     	   } 
     	this.setAfiliacionEmpresaList(list3);
 =======
+=======
+>>>>>>> parent of 4ce73e8... FKS, List
     public Entidad fromJson(JSONObject json) {
     	this.setNit(json.getAsString("nit"));
     	this.setNombre(json.getAsString("nombre"));
@@ -276,6 +279,9 @@ public class Entidad implements Serializable {
     	this.setTelefono((int) json.getAsNumber("telefono"));
     	this.setDireccion(json.getAsString("direccion"));
     	this.setEmail(json.getAsString("email"));
+<<<<<<< HEAD
+>>>>>>> parent of 4ce73e8... FKS, List
+=======
 >>>>>>> parent of 4ce73e8... FKS, List
     	return this;
     }
