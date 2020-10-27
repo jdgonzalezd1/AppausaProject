@@ -6,8 +6,6 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -23,9 +21,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import net.minidev.json.JSONObject;
 
 /**
  *
@@ -128,19 +124,13 @@ public class NivelRiesgo implements Serializable {
     public JSONObject toJson() {
     	JSONObject json = new JSONObject();
     	json.put("nombre", this.getNombre());
-    	json.put("descripcion",this.getDescripcion());
-    	JSONArray lista = new JSONArray();
-    	List<Contrato> l = this.getContratos();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
-    		i++;
-    	}
-    	json.put("contratos", lista);
+    	json.put("descricion",this.getDescripcion());
+    	
     	return json;
     }
     
     
+<<<<<<< HEAD
     public NivelRiesgo fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setNombre(json.getString("nombre"));
     	this.setDescripcion(json.getString("descripcion"));
@@ -154,6 +144,12 @@ public class NivelRiesgo implements Serializable {
    			i++;
    	   }
    		this.setContratos(list);
+=======
+    public NivelRiesgo fromJson(JSONObject json) {
+    	this.setNombre(json.getAsString("nombre"));
+    	this.setDescripcion(json.getAsString("descripcion"));
+    	
+>>>>>>> parent of 4ce73e8... FKS, List
     	return this;
     }
 }

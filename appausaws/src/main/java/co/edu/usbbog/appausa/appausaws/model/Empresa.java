@@ -6,8 +6,6 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -22,8 +20,6 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
@@ -227,26 +223,10 @@ public class Empresa implements Serializable {
     	json.put("descripEmpresa", this.getDescripEmpresa());
     	json.put("numEmpleados", this.getNumEmpleados());
     	json.put("tipo", this.getTipo());
-    	JSONArray lista = new JSONArray();
-    	List<AfiliacionEmpresa> l = getAfiliacionEmpresaList();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
-    		i++;
-    	}
-    	json.put("afiliacionEmpresaist", lista);
-    	lista = null;
-    	List<Contrato> l1 = getContratoList();
-    	i = 0;
-    	while (l1.get(i) != null) {
-    		lista.put(l1.get(i).toJson());
-    		i++;
-    	}
-    	json.put("contratoList", lista);
     	return json;
     }
     
-    public Empresa fromJson(JSONObject json) throws JSONException, ParseException {
+    public Empresa fromJson(JSONObject json) {
     	this.setNit(json.getString("nit"));
     	this.setNombre(json.getString("nombre"));
     	this.setDireccion(json.getString("direccion"));
@@ -256,6 +236,7 @@ public class Empresa implements Serializable {
     	this.setDescripEmpresa(json.getString("descripEmpresa"));
     	this.setNumEmpleados(json.getInt("numEmpleados"));
     	this.setNombre(json.getString("tipo"));
+<<<<<<< HEAD
     	ArrayList<AfiliacionEmpresa> list = new ArrayList<AfiliacionEmpresa>();     
     	JSONArray jsonArray = json.getJSONArray("afiliacionEmpresaist"); 
     	int i = 0;
@@ -276,6 +257,8 @@ public class Empresa implements Serializable {
     	    i++;
     	   } 
     	this.setContratoList(list1);
+=======
+>>>>>>> parent of 4ce73e8... FKS, List
     	return this;
     }
     

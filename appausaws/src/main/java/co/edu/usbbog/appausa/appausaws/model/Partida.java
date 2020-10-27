@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
+import net.minidev.json.JSONObject;
 
 /**
  *
@@ -164,30 +164,27 @@ public class Partida implements Serializable {
        
     public JSONObject toJson() {
     	JSONObject json = new JSONObject();
-    	json.put("partidaPk", this.getPartidaPK().toJson());
+    	json.put("partidaPk", this.getPartidaPK());
     	json.put("inicio", this.getInicio());
     	json.put("fin", this.getFin());
     	json.put("puntaje", this.getPuntaje());
     	json.put("duracion", this.getDuracion());
-    	json.put("cuenta", this.getCuenta().toJson());
-    	json.put("juego", this.getJuego().toJson());
+    	json.put("cuenta", this.getCuenta());
+    	json.put("juego", this.getJuego());
     	return json;
     }
     
     public Partida fromJson(JSONObject json) throws ParseException {
-    	PartidaPK pk = this.getPartidaPK().fromJson(json.getJSONObject("partidaPK"));
-    	this.setPartidaPK(pk);
-    	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getString("inicio"));
+    	this.setPartidaPK((PartidaPK) json.get("partidaPK"));
+    	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getAsString("inicio"));
     	this.setInicio(f);
-    	f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getString("fin"));
+    	f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getAsString("fin"));
     	this.setFin(f);
-    	this.setPuntaje((int) json.getInt("puntaje"));
-    	f = new SimpleDateFormat("HH:mm:ss").parse(json.getString("duracion"));
+    	this.setPuntaje((int) json.getAsNumber("puntaje"));
+    	f = new SimpleDateFormat("HH:mm:ss").parse(json.getAsString("duracion"));
     	this.setDuracion(f);
-    	Cuenta c = this.getCuenta().fromJson(json.getJSONObject("cuenta"));
-    	this.setCuenta(c);
-    	Juego j = this.getJuego().fromJson(json.getJSONObject("juego"));
-    	this.setJuego(j);
+    	this.setCuenta((Cuenta) json.get("cuenta"));
+    	this.setJuego((Juego) json.get("juego"));
     	return this;
     }
     

@@ -8,7 +8,6 @@ package co.edu.usbbog.appausa.appausaws.model;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -26,7 +25,6 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -293,30 +291,7 @@ public class Empleado implements Serializable {
     	json.put("ciudad", this.getCiudad());
     	json.put("nacionalidad", this.getNacionalidad());
     	json.put("cuenta", this.getCuenta().toJson());
-    	JSONArray lista = new JSONArray();
-    	List<AfiliacionEmpleado> l = getAfiliacionEmpleadoList();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
-    		i++;
-    	}
-    	json.put("afiliacionEmpleadoList", lista);
-    	lista = null;
-    	List<ConsultaMedica> l1 = getConsultaMedicaList();
-    	i = 0;
-    	while (l1.get(i) != null) {
-    		lista.put(l1.get(i).toJson());
-    		i++;
-    	}
-    	json.put("consultaMedicaList", lista);
-    	lista = null;
-    	List<AfeccionEmpleado> l2 = getAfeccionEmpleadoList();
-    	i = 0;
-    	while (l2.get(i) != null) {
-    		lista.put(l2.get(i).toJson());
-    		i++;
-    	}
-    	json.put("afeccionEmpleadoList", lista);
+    	//FK
     	return json;
     }
     
@@ -333,6 +308,7 @@ public class Empleado implements Serializable {
     	this.setDireccion(json.getString("direccion"));
     	this.setCiudad(json.getString("ciudad"));
     	this.setNacionalidad(json.getString("nacionalidad"));
+<<<<<<< HEAD
     	Cuenta c = this.getCuenta().fromJson(json.getJSONObject("cuenta"));
     	this.setCuenta(c);
     	ArrayList<AfeccionEmpleado> list = new ArrayList<AfeccionEmpleado>();     
@@ -365,6 +341,9 @@ public class Empleado implements Serializable {
     	    i++;
     	   } 
     	this.setConsultaMedicaList(list2);
+=======
+    	//this.setCuenta(json.);
+>>>>>>> parent of 4ce73e8... FKS, List
     	return this;
     }
     

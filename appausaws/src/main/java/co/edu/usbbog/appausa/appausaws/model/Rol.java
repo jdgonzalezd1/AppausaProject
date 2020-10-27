@@ -6,8 +6,6 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -22,9 +20,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import net.minidev.json.JSONObject;
 
 /**
  *
@@ -116,17 +112,11 @@ public class Rol implements Serializable {
     	JSONObject json = new JSONObject();
     	json.put("nombre", this.getNombre());
     	json.put("descrpcion", this.getDescrpcion());
-    	JSONArray lista = new JSONArray();
-    	List<Cuenta> l = this.getCuentas();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
-    		i++;
-    	}
-    	json.put("cuentas", lista);
+    	//FK
     	return json;
     }
     
+<<<<<<< HEAD
     public Rol fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setNombre(json.getString("nombre"));
     	this.setDescrpcion(json.getString("descrpcion"));
@@ -141,6 +131,12 @@ public class Rol implements Serializable {
     	    i++;
     	} 
     	this.setCuentas(list);
+=======
+    public Rol fromJson(JSONObject json) {
+    	this.setNombre(json.getAsString("nombre"));
+    	this.setDescrpcion(json.getAsString("descrpcion"));
+    	//
+>>>>>>> parent of 4ce73e8... FKS, List
     	return this;
     }
     

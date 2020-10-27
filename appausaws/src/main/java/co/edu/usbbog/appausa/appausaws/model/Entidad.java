@@ -6,8 +6,6 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -21,12 +19,9 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
+import net.minidev.json.JSONObject;
 
 /**
  *
@@ -218,41 +213,11 @@ public class Entidad implements Serializable {
     	json.put("telefono", this.getTelefono());
     	json.put("direccion", this.getDireccion());
     	json.put("email", this.getEmail());
-    	JSONArray lista = new JSONArray();
-    	List<AfeccionEmpleado> l = this.getAfeccionEmpleadoList();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
-    		i++;
-    	}
-    	json.put("afeccionEmpleadoList", lista);
-    	lista = new JSONArray();
-    	List<AfiliacionContrato> l1 = this.getAfiliacionContratoList();
-    	i = 0;
-    	while (l1.get(i) != null) {
-    		lista.put(l1.get(i).toJson());
-    		i++;
-    	}
-    	json.put("afiliacionContratoList", lista);
-    	lista = new JSONArray();
-    	List<AfiliacionEmpleado> l2 = this.getAfiliacionEmpleadoList();
-    	i = 0;
-    	while (l2.get(i) != null) {
-    		lista.put(l2.get(i).toJson());
-    		i++;
-    	}
-    	json.put("afiliacionEmpleadoList", lista);
-    	lista = new JSONArray();
-    	List<AfiliacionEmpresa> l3 = this.getAfiliacionEmpresaList();
-    	i = 0;
-    	while (l3.get(i) != null) {
-    		lista.put(l3.get(i).toJson());
-    		i++;
-    	}
-    	json.put("afiliacionEmpresaList", lista);
+    	//FK
     	return json;
     	}
     
+<<<<<<< HEAD
     public Entidad fromJson(JSONObject json) throws JSONException, ParseException{
     	this.setNit(json.getString("nit"));
     	this.setNombre(json.getString("nombre"));
@@ -303,8 +268,16 @@ public class Entidad implements Serializable {
     	    i++;
     	   } 
     	this.setAfiliacionEmpresaList(list3);
+=======
+    public Entidad fromJson(JSONObject json) {
+    	this.setNit(json.getAsString("nit"));
+    	this.setNombre(json.getAsString("nombre"));
+    	this.setTipo(json.getAsString("tipo"));
+    	this.setTelefono((int) json.getAsNumber("telefono"));
+    	this.setDireccion(json.getAsString("direccion"));
+    	this.setEmail(json.getAsString("email"));
+>>>>>>> parent of 4ce73e8... FKS, List
     	return this;
     }
-
     
 }

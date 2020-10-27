@@ -6,8 +6,6 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
-import java.text.ParseException;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -19,7 +17,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -136,24 +133,20 @@ public class AfeccionEmpleado implements Serializable {
     //afeccionEmpleadoPK, fechaDiagnostico, afeccionMedica1,, empleado1, entidad
     public JSONObject toJson() {
     	JSONObject json = new JSONObject();
-    	json.put("afeccionEmpleadoPK", this.getAfeccionEmpleadoPK().toJson());
+    	json.put("afeccionEmpleadoPK", this.getAfeccionEmpleadoPK());
     	json.put("fechaDiagnostico", this.getFechaDiagnostico());
-    	json.put("afeccionMedica", this.getAfeccionMedica1().toJson());
-    	json.put("empleado",this.getEmpleado1().toJson());
-    	json.put("entidad", this.getEntidad().toJson());
+    	json.put("afeccionMedica", this.getAfeccionMedica1());
+    	json.put("empleado",this.getEmpleado1());
+    	json.put("entidad", this.getEntidad());
     	return json;
     }
     
-    public AfeccionEmpleado fromJson(JSONObject json) throws JSONException, ParseException {
-    	AfeccionEmpleadoPK pk = this.getAfeccionEmpleadoPK().fromJson((JSONObject) json.get("afeccionEmpleadoPK"));
-    	this.setAfeccionEmpleadoPK(pk);
+    public AfeccionEmpleado fromJson(JSONObject json) {
+    	this.setAfeccionEmpleadoPK((AfeccionEmpleadoPK) json.get("afeccionEmpleadoPK"));
     	this.setFechaDiagnostico(json.getString("fechaDiagnostico"));
-    	AfeccionMedica am = this.getAfeccionMedica1().fromJson(json.getJSONObject("afeccionMedica"));
-    	this.setAfeccionMedica1(am);
-    	Empleado e = this.getEmpleado1().fromJson(json.getJSONObject("empleado"));
-    	this.setEmpleado1(e);
-    	Entidad en = this.getEntidad().fromJson(json.getJSONObject("entidad"));
-    	this.setEntidad(en);
+    	this.setAfeccionMedica1((AfeccionMedica) json.get("afeccionMedica"));
+    	this.setEmpleado1((Empleado) json.get("empleado"));
+    	this.setEntidad((Entidad) json.get("entidad"));
     	return this;
     }
     

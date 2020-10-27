@@ -26,7 +26,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
+import net.minidev.json.JSONObject;
 
 /**
  *
@@ -168,16 +168,14 @@ public class Incapacidad implements Serializable {
     }
     
     public Incapacidad fromJson(JSONObject json) throws ParseException {
-    	this.setCod((Integer) json.getInt("cod"));
-    	Date f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("inicioIncapacidad"));
+    	this.setCod((Integer) json.getAsNumber("cod"));
+    	Date f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getAsString("inicioIncapacidad"));
     	this.setInicioIncapacidad(f);
-    	f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("finIncapacidad"));
+    	f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getAsString("finIncapacidad"));
     	this.setFinIncapacidad(f);
-    	this.setIndicaciones(json.getString("indicaciones"));
-    	ConsultaMedica cm = this.getConsultaMedica().fromJson(json.getJSONObject("consultaMedica"));
-    	this.setConsultaMedica(cm);
-    	TipoIncapacidad ti = this.getTipoIncapacidad().fromJson(json.getJSONObject("tipoIncapácidad"));
-    	this.setTipoIncapacidad(ti);
+    	this.setIndicaciones(json.getAsString("indicaciones"));
+    	this.setConsultaMedica((ConsultaMedica) json.get("consultaMedica"));
+    	this.setTipoIncapacidad((TipoIncapacidad) json.get("tipoIncapácidad"));
     	return this;
     }
     

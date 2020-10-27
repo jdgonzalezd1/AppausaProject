@@ -6,8 +6,6 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -26,12 +24,9 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
+import net.minidev.json.JSONObject;
 
 /**
  *
@@ -215,26 +210,18 @@ public class Juego implements Serializable {
     	json.put("mecanica", this.getMecanica());
     	json.put("urlDescarga", this.getUrlDescarga());
     	json.put("dispositivo", this.getDispositivo());
-    	json.put("tipoJuego", this.getTipoJuego().toJson());
-    	JSONArray lista = new JSONArray();
-    	List<Partida> l = this.getPartidas();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
-    		i++;
-    	}
-    	json.put("partidas", lista);
+    	json.put("tipoJuego", this.getTipoJuego());
     	return json;
     }
     
-    public Juego fromJson(JSONObject json) throws JSONException, ParseException{
-    	this.setId((Integer) json.getInt("id"));
-    	this.setNombre(json.getString("nombre"));
-    	this.setPuntaje((int) json.getInt("puntaje"));
-    	this.setMecanica(json.getString("mecanica"));
-    	this.setLinkApp(json.getString("linkApp"));
-    	TipoJuego tj = this.getTipoJuego().fromJson(json.getJSONObject("tipoJuego"));
+    public Juego fromJson(JSONObject json){
+    	this.setId((Integer) json.getAsNumber("id"));
+    	this.setNombre(json.getAsString("nombre"));
+    	this.setPuntaje((int) json.getAsNumber("puntaje"));
+    	this.setMecanica(json.getAsString("mecanica"));
+    	this.setLinkApp(json.getAsString("linkApp"));
     	this.setTipoJuego((TipoJuego) json.get("tipoJuego"));
+<<<<<<< HEAD
     	ArrayList<Partida> list = new ArrayList<Partida>();     
     	JSONArray jsonArray = json.getJSONArray("partidas"); 
     	int i = 0;
@@ -245,6 +232,8 @@ public class Juego implements Serializable {
     	    i++;
     	} 
     	this.setPartidas(list);
+=======
+>>>>>>> parent of 4ce73e8... FKS, List
     	return this;
     }
     

@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.gson.Gson;
 
-import org.json.JSONObject;
+import net.minidev.json.JSONObject;
 
 /**
  *
@@ -156,20 +156,18 @@ public class Log implements Serializable {
     	json.put("fecha",this.getFecha());
     	json.put("mensaje",this.getMensaje());
     	json.put("eventoNombre",this.getEventoNombre());
-    	json.put("cuenta",this.getCuenta().toJson());
-    	json.put("tipoEvento", this.getTipoEvento().toJson());
+    	json.put("cuenta",this.getCuenta());
+    	json.put("tipoEvento", this.getTipoEvento());
     	return json;
     }
     
     public Log fromJson(JSONObject json) throws ParseException {
-    	this.setId((Integer) json.getInt("id"));
-    	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getString("fecha"));
+    	this.setId((Integer) json.getAsNumber("id"));
+    	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getAsString("fecha"));
     	this.setFecha(f);
-    	this.setMensaje(json.getString("mensaje"));
-    	this.setEventoNombre(json.getString("eventoNombre"));
-    	Cuenta c = this.getCuenta().fromJson(json.getJSONObject("cuenta"));
-    	this.setCuenta(c);
-    	TipoEvento te = this.getTipoEvento().fromJson(json.getJSONObject("tipoEvento"));
+    	this.setMensaje(json.getAsString("mensaje"));
+    	this.setEventoNombre(json.getAsString("eventoNombre"));
+    	this.setCuenta((Cuenta) json.get("cuenta"));
     	this.setTipoEvento((TipoEvento) json.get("tipoEvento"));
     	return this;
     }
