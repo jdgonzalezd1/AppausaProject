@@ -7,7 +7,6 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -20,8 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -131,11 +128,7 @@ public class TipoEvento implements Serializable {
     	json.put("descrpcion", this.getDescripcion());
     	JSONArray lista = new JSONArray();
     	List<Log> l = this.getLogs();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson().getString("id"));
-    		i++;
-    	}
+    	l.forEach((elemento) -> lista.put(elemento.toJson().getString("id")));
     	json.put("logs", lista);
     	return json;
     }

@@ -7,10 +7,8 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,10 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -162,8 +157,8 @@ public class Incapacidad implements Serializable {
     	json.put("inicioIncapacidad", this.getInicioIncapacidad());
     	json.put("finIncapacidad", this.getFinIncapacidad());
     	json.put("indicaciones", this.getIndicaciones());
-    	json.put("consultaMedica", this.getConsultaMedica().toJson());
-    	json.put("tipoIncapacidad", this.getTipoIncapacidad().toJson());
+    	json.put("consultaMedica", this.getConsultaMedica().toJson().getString("id"));
+    	json.put("tipoIncapacidad", this.getTipoIncapacidad().toJson().getString("nombre"));
     	return json;
     }
     
@@ -172,10 +167,6 @@ public class Incapacidad implements Serializable {
     	this.setInicioIncapacidad(LocalDate.parse(json.getString("inicioIncapacidad"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     	this.setFinIncapacidad(LocalDate.parse(json.getString("finIncapacidad"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     	this.setIndicaciones(json.getString("indicaciones"));
-    	ConsultaMedica cm = this.getConsultaMedica().fromJson(json.getJSONObject("consultaMedica"));
-    	this.setConsultaMedica(cm);
-    	TipoIncapacidad ti = this.getTipoIncapacidad().fromJson(json.getJSONObject("tipoIncapácidad"));
-    	this.setTipoIncapacidad(ti);
     	return this;
     }
     

@@ -151,8 +151,8 @@ public class AfiliacionContrato implements Serializable {
     	json.put("afiliacionContratoPK", this.getAfiliacionContratoPK().toJson());
     	json.put("fechaInicio", this.getFechaInicio());
     	json.put("fechaFin", this.getFechaFin());
-    	json.put("contrato", this.getContrato().toJson());
-    	json.put("entidad", this.getEntidad1().toJson());
+    	json.put("contrato", this.getContrato().toJson().getString("contratoPK"));
+    	json.put("entidad", this.getEntidad1().toJson().getString("nit"));
     	return json;
     }
     
@@ -162,11 +162,7 @@ public class AfiliacionContrato implements Serializable {
     	this.setFechaInicio(LocalDate.parse(json.getString("fechaInicio"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     	if (json.getString("fechaInicio") != "" && json.getString("fechaInicio") != null){
     		this.setFechaFin(LocalDate.parse(json.getString("fechaFin"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-    	}
-    	Contrato c = this.getContrato().fromJson(json.getJSONObject("contrato"));
-    	this.setContrato(c);
-    	Entidad e  = this.getEntidad1().fromJson(json.getJSONObject("entidad"));
-    	this.setEntidad1(e);    	
+    	}   	
     	return this;
     }
     

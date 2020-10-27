@@ -6,12 +6,10 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -21,11 +19,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -171,24 +167,18 @@ public class Partida implements Serializable {
     	json.put("fin", this.getFin());
     	json.put("puntaje", this.getPuntaje());
     	json.put("duracion", this.getDuracion());
-    	json.put("cuenta", this.getCuenta().toJson());
-    	json.put("juego", this.getJuego().toJson());
+    	json.put("cuenta", this.getCuenta().toJson().getString("empleado"));
+    	json.put("juego", this.getJuego().toJson().getString("id"));
     	return json;
     }
     
-    public Partida fromJson(JSONObject json) throws ParseException {
+    public Partida fromJson(JSONObject json)  {
     	PartidaPK pk = this.getPartidaPK().fromJson(json.getJSONObject("partidaPK"));
     	this.setPartidaPK(pk);
-    	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getString("inicio"));
     	this.setInicio(LocalDateTime.parse(json.getString("inicio"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-    	f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getString("fin"));
     	this.setFin(LocalDateTime.parse(json.getString("fin"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     	this.setPuntaje((int) json.getInt("puntaje"));
     	this.setDuracion(LocalTime.parse(json.getString("duracion"), DateTimeFormatter.ofPattern("HH:mm:ss")));
-    	Cuenta c = this.getCuenta().fromJson(json.getJSONObject("cuenta"));
-    	this.setCuenta(c);
-    	Juego j = this.getJuego().fromJson(json.getJSONObject("juego"));
-    	this.setJuego(j);
     	return this;
     }
     

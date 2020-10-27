@@ -351,7 +351,7 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `ingusb_appausa`.`afeccion_empleado` (
   `afeccion_medica` VARCHAR(45) NOT NULL,
   `empleado` INT(10) NOT NULL,
-  `fecha_diagnostico` VARCHAR(45) NOT NULL,
+  `fecha_diagnostico` DATETIME NOT NULL,
   `entidad` VARCHAR(17) NOT NULL,
   PRIMARY KEY (`afeccion_medica`, `empleado`),
   INDEX `fk_afeccion_empleado_empleado_idx` (`empleado` ASC),

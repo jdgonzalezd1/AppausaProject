@@ -7,7 +7,6 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -26,7 +25,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
 
 /**
  *
@@ -227,22 +225,14 @@ public class Empresa implements Serializable {
     	json.put("descripEmpresa", this.getDescripEmpresa());
     	json.put("numEmpleados", this.getNumEmpleados());
     	json.put("tipo", this.getTipo());
-    	JSONArray lista = new JSONArray();
+    	final JSONArray lista = new JSONArray();
     	List<AfiliacionEmpresa> l = getAfiliacionEmpresaList();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson().getString("afiliacionEmpresaPK"));
-    		i++;
-    	}
+    	l.forEach((elemento) -> lista.put(elemento.toJson().getString("afiliacionEmpresaPK")));
     	json.put("afiliacionEmpresaist", lista);
-    	lista = null;
+    	final JSONArray lista1 = new JSONArray();
     	List<Contrato> l1 = getContratoList();
-    	i = 0;
-    	while (l1.get(i) != null) {
-    		lista.put(l1.get(i).toJson().getString("contratoPK"));
-    		i++;
-    	}
-    	json.put("contratoList", lista);
+    	l1.forEach((elemento) -> lista1.put(elemento.toJson().getString("contratoPK")));
+    	json.put("contratoList", lista1);
     	return json;
     }
     

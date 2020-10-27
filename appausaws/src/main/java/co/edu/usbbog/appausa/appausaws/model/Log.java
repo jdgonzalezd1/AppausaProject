@@ -7,10 +7,8 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,11 +18,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.google.gson.Gson;
+
 
 import org.json.JSONObject;
 
@@ -157,8 +153,8 @@ public class Log implements Serializable {
     	json.put("fecha",this.getFecha());
     	json.put("mensaje",this.getMensaje());
     	json.put("eventoNombre",this.getEventoNombre());
-    	json.put("cuenta",this.getCuenta().toJson());
-    	json.put("tipoEvento", this.getTipoEvento().toJson());
+    	json.put("cuenta",this.getCuenta().toJson().getString("empleado"));
+    	json.put("tipoEvento", this.getTipoEvento().toJson().getString("nombre"));
     	return json;
     }
     
@@ -167,10 +163,6 @@ public class Log implements Serializable {
     	this.setFecha(LocalDateTime.parse(json.getString("fecha"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     	this.setMensaje(json.getString("mensaje"));
     	this.setEventoNombre(json.getString("eventoNombre"));
-    	Cuenta c = this.getCuenta().fromJson(json.getJSONObject("cuenta"));
-    	this.setCuenta(c);
-    	TipoEvento te = this.getTipoEvento().fromJson(json.getJSONObject("tipoEvento"));
-    	this.setTipoEvento((TipoEvento) json.get("tipoEvento"));
     	return this;
     }
     

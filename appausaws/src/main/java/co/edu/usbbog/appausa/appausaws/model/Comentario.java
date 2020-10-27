@@ -7,12 +7,8 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,15 +21,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
 
 /**
  *
@@ -166,7 +158,7 @@ public class Comentario implements Serializable {
     	json.put("leido", this.getLeido());
     	json.put("respuesta", this.getRespuesta());
     	json.put("fecha", this.getFecha());
-    	json.put("cuentaEmpleado", this.getCuentaEmpleado().toJson());
+    	json.put("cuentaEmpleado", this.getCuentaEmpleado().toJson().getString("empleado"));
     	return json;    	
     }
     
@@ -176,8 +168,6 @@ public class Comentario implements Serializable {
     	this.setLeido((short) json.get("leido"));
     	this.setRespuesta(json.getString("respuesta"));
     	this.setFecha(LocalDateTime.parse(json.getString("fechaInicio"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-    	Cuenta c = this.getCuentaEmpleado().fromJson(json.getJSONObject("cuentaEmpleado"));
-    	this.setCuentaEmpleado(c);
     	return this;
     	
     }

@@ -7,6 +7,8 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -41,8 +43,9 @@ public class AfeccionEmpleado implements Serializable {
     @EmbeddedId
     protected AfeccionEmpleadoPK afeccionEmpleadoPK;
     @Basic(optional = false)
-    @Column(name = "fecha_diagnostico", nullable = false, length = 45)
-    private String fechaDiagnostico;
+    /// CAMBIAR 
+    @Column(name = "fecha_diagnostico", nullable = false, columnDefinition = "DATETIME")
+    private LocalDateTime fechaDiagnostico;
     @JoinColumn(name = "afeccion_medica", referencedColumnName = "nombre", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private AfeccionMedica afeccionMedica1;
@@ -60,7 +63,7 @@ public class AfeccionEmpleado implements Serializable {
         this.afeccionEmpleadoPK = afeccionEmpleadoPK;
     }
 
-    public AfeccionEmpleado(AfeccionEmpleadoPK afeccionEmpleadoPK, String fechaDiagnostico) {
+    public AfeccionEmpleado(AfeccionEmpleadoPK afeccionEmpleadoPK, LocalDateTime fechaDiagnostico) {
         this.afeccionEmpleadoPK = afeccionEmpleadoPK;
         this.fechaDiagnostico = fechaDiagnostico;
     }
@@ -77,11 +80,11 @@ public class AfeccionEmpleado implements Serializable {
         this.afeccionEmpleadoPK = afeccionEmpleadoPK;
     }
 
-    public String getFechaDiagnostico() {
+    public LocalDateTime getFechaDiagnostico() {
         return fechaDiagnostico;
     }
 
-    public void setFechaDiagnostico(String fechaDiagnostico) {
+    public void setFechaDiagnostico(LocalDateTime fechaDiagnostico) {
         this.fechaDiagnostico = fechaDiagnostico;
     }
 
@@ -138,22 +141,16 @@ public class AfeccionEmpleado implements Serializable {
     	JSONObject json = new JSONObject();
     	json.put("afeccionEmpleadoPK", this.getAfeccionEmpleadoPK().toJson());
     	json.put("fechaDiagnostico", this.getFechaDiagnostico());
-    	json.put("afeccionMedica", this.getAfeccionMedica1().toJson());
-    	json.put("empleado",this.getEmpleado1().toJson());
-    	json.put("entidad", this.getEntidad().toJson());
+    	json.put("afeccionMedica", this.getAfeccionMedica1().toJson().getString("afeccionMedicaPK"));
+    	json.put("empleado",this.getEmpleado1().toJson().getString("numDocumento"));
+    	json.put("entidad", this.getEntidad().toJson().getString("nit"));
     	return json;
     }
     
     public AfeccionEmpleado fromJson(JSONObject json) throws JSONException, ParseException {
     	AfeccionEmpleadoPK pk = this.getAfeccionEmpleadoPK().fromJson((JSONObject) json.get("afeccionEmpleadoPK"));
     	this.setAfeccionEmpleadoPK(pk);
-    	this.setFechaDiagnostico(json.getString("fechaDiagnostico"));
-    	AfeccionMedica am = this.getAfeccionMedica1().fromJson(json.getJSONObject("afeccionMedica"));
-    	this.setAfeccionMedica1(am);
-    	Empleado e = this.getEmpleado1().fromJson(json.getJSONObject("empleado"));
-    	this.setEmpleado1(e);
-    	Entidad en = this.getEntidad().fromJson(json.getJSONObject("entidad"));
-    	this.setEntidad(en);
+    	this.setFechaDiagnostico(LocalDateTime.parse(json.getString("fechaDiagnostico"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     	return this;
     }
     

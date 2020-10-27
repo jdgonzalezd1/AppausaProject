@@ -7,11 +7,8 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -25,8 +22,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -34,7 +29,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
 
 /**
  *
@@ -260,22 +254,14 @@ public class Contrato implements Serializable {
 		json.put("empresa", this.getEmpresa1().toJson());
 		json.put("nivelRiesgo", this.getNivelRiesgo().toJson());
 		json.put("tipoContrato", this.getTipoContrato().toJson());
-		JSONArray lista = new JSONArray();
+		final JSONArray lista = new JSONArray();
 		List<AfiliacionContrato> l = getAfiliacionContratoList();
-		int i = 0;
-		while (l.get(i) != null) {
-			lista.put(l.get(i).toJson().getString("afiliacionContratoPK"));
-			i++;
-		}
+		l.forEach((elemento) -> lista.put(elemento.toJson().getString("afeccionEmpleadoPK")));
 		json.put("listaAfiliacionContrato", lista);
-		lista = null;
+		final JSONArray lista1 = new JSONArray();
 		List<ContratoLicencia> l1 = getContratoLicenciaList();
-		i = 0;
-		while (l1.get(i) != null) {
-			lista.put(l.get(i).toJson().getString("contratoLicenciaPK"));
-			i++;
-		}
-		json.put("listaContratoLicencia", lista);
+		l1.forEach((elemento) -> lista1.put(elemento.toJson().getString("afeccionEmpleadoPK")));
+		json.put("listaContratoLicencia", lista1);
 		return json;
 	}
 
@@ -290,14 +276,6 @@ public class Contrato implements Serializable {
 		this.setFunciones(json.getString("funciones"));
 		this.setCargo(json.getString("cargo"));
 		this.setRepresentante((short) json.get("representantes"));
-		Empleado emp = this.getEmpleado1().fromJson(json.getJSONObject("empleado"));
-		this.setEmpleado1(emp);
-		Empresa em = this.getEmpresa1().fromJson(json.getJSONObject("empresa"));
-		this.setEmpresa1((Empresa) json.get("empresa"));
-		NivelRiesgo nr = this.getNivelRiesgo().fromJson(json.getJSONObject("nivelRiesgo"));
-		this.setNivelRiesgo(nr);
-		TipoContrato tp = this.getTipoContrato().fromJson(json.getJSONObject("tipoContrato"));
-		this.setTipoContrato(tp);
 		return this;
 	}
 

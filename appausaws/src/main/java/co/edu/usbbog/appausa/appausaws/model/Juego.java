@@ -215,14 +215,10 @@ public class Juego implements Serializable {
     	json.put("mecanica", this.getMecanica());
     	json.put("urlDescarga", this.getUrlDescarga());
     	json.put("dispositivo", this.getDispositivo());
-    	json.put("tipoJuego", this.getTipoJuego().toJson());
+    	json.put("tipoJuego", this.getTipoJuego().toJson().getString("nombre"));
     	JSONArray lista = new JSONArray();
     	List<Partida> l = this.getPartidas();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson().getString("partidaPK"));
-    		i++;
-    	}
+    	l.forEach((elemento) -> lista.put(elemento.toJson().getString("partidaPK")));
     	json.put("partidas", lista);
     	return json;
     }
@@ -233,8 +229,6 @@ public class Juego implements Serializable {
     	this.setPuntaje((int) json.getInt("puntaje"));
     	this.setMecanica(json.getString("mecanica"));
     	this.setLinkApp(json.getString("linkApp"));
-    	TipoJuego tj = this.getTipoJuego().fromJson(json.getJSONObject("tipoJuego"));
-    	this.setTipoJuego((TipoJuego) json.get("tipoJuego"));
     	return this;
     }
     

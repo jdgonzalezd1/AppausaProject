@@ -6,14 +6,10 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -28,8 +24,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -38,7 +32,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
 
 /**
  *
@@ -287,38 +280,22 @@ public class Cuenta implements Serializable {
     	json.put("tiempoTotal", this.getTiempoTotal());
     	json.put("tiempoMes", this.getTiempoMes());
     	json.put("empleado1", this.getEmpleado1().toJson());
-    	JSONArray lista = new JSONArray();
+    	final JSONArray lista = new JSONArray();
     	List<Rol> l = getRoles();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson().getString("nombre"));
-    		i++;
-    	}
+    	l.forEach((elemento) -> lista.put(elemento.toJson().getString("nombre")));
     	json.put("roles", lista);
-    	lista = null;
+    	final JSONArray lista1 = new JSONArray();
     	List<Log> l1 = getLogs();
-    	i = 0;
-    	while (l1.get(i) != null) {
-    		lista.put(l1.get(i).toJson().getString("id"));
-    		i++;
-    	}
-    	json.put("logs", lista);
-    	lista = null;
+    	l1.forEach((elemento) -> lista1.put(elemento.toJson().getString("id")));
+    	json.put("logs", lista1);
+    	final JSONArray lista2 = new JSONArray();
     	List<Comentario> l2 = getComentarioList();
-    	i = 0;
-    	while (l2.get(i) != null) {
-    		lista.put(l2.get(i).toJson().getString("codigo"));
-    		i++;
-    	}
-    	json.put("comentarios", lista);
-    	lista = null;
+    	l2.forEach((elemento) -> lista2.put(elemento.toJson().getString("codigo")));
+    	json.put("comentarios", lista2);
+    	final JSONArray lista3 = new JSONArray();
     	List<Partida> l3 = getPartidas();
-    	i = 0;
-    	while (l3.get(i) != null) {
-    		lista.put(l3.get(i).toJson().getString("partidaPK"));
-    		i++;
-    	}
-    	json.put("partidas", lista);
+    	l3.forEach((elemento) -> lista3.put(elemento.toJson().getString("id")));
+    	json.put("partidas", lista3);
     	return json;
     }
     

@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -19,14 +18,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
 
 /**
  *
@@ -158,8 +154,8 @@ public class AfiliacionEmpleado implements Serializable {
     	json.put("tipo", this.getTipo());
     	json.put("fechaInicio", this.getFechaInicio());
     	json.put("fechaFin", this.getFechaFin());
-    	json.put("empleado", this.getEmpleado1().toJson());
-    	json.put("entidad", this.getEntidad1().toJson());
+    	json.put("empleado", this.getEmpleado1().toJson().getString("numDocumento"));
+    	json.put("entidad", this.getEntidad1().toJson().getString("nit"));
     	return json;    	
     }
     
@@ -171,10 +167,6 @@ public class AfiliacionEmpleado implements Serializable {
     	if (json.getString("fechaInicio") != "" && json.getString("fechaInicio") != null){
     		this.setFechaFin(LocalDate.parse(json.getString("fechaFin"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     	}
-    	Empleado e = this.getEmpleado1().fromJson(json.getJSONObject("empleado"));
-    	this.setEmpleado1((Empleado) json.get("empleado"));
-    	Entidad en = this.getEntidad1().fromJson(json.getJSONObject("entidad"));
-    	this.setEntidad1(en);
     	return this;
     }
     

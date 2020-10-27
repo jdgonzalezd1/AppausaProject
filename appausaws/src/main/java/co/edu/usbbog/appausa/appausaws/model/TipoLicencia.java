@@ -6,8 +6,6 @@
 package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -21,7 +19,6 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -154,16 +151,12 @@ public class TipoLicencia implements Serializable {
     	json.put("remunerada", this.getRemunerada());
     	JSONArray lista = new JSONArray();
     	List<ContratoLicencia> l = this.getContratosLicencias();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson().getString("contratoLicenciaPK"));
-    		i++;
-    	}
+    	l.forEach((elemento) -> lista.put(elemento.toJson().getString("contratoLicenciaPK")));
     	json.put("contratosLicencia", lista);
     	return json;
     }
     
-    public TipoLicencia fromJson(JSONObject json) throws JSONException, ParseException {
+    public TipoLicencia fromJson(JSONObject json){
     	this.setNombre(json.getString("nombre"));
     	this.setDescripcion(json.getString("descripcion"));
     	this.setRemunerada((short) json.getInt("remunerada"));

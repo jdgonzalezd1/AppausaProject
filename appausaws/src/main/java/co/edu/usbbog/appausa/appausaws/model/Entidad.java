@@ -7,7 +7,6 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -23,9 +22,6 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import com.google.gson.Gson;
-
 import org.json.JSONObject;
 
 /**
@@ -218,38 +214,22 @@ public class Entidad implements Serializable {
     	json.put("telefono", this.getTelefono());
     	json.put("direccion", this.getDireccion());
     	json.put("email", this.getEmail());
-    	JSONArray lista = new JSONArray();
+    	final JSONArray lista = new JSONArray();
     	List<AfeccionEmpleado> l = this.getAfeccionEmpleadoList();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson().getString("afeccionEmpleadoPK"));
-    		i++;
-    	}
+    	l.forEach((elemento) -> lista.put(elemento.toJson().getString("afeccionEmpleadoPK")));
     	json.put("afeccionEmpleadoList", lista);
-    	lista = new JSONArray();
+    	final JSONArray lista1 = new JSONArray();
     	List<AfiliacionContrato> l1 = this.getAfiliacionContratoList();
-    	i = 0;
-    	while (l1.get(i) != null) {
-    		lista.put(l1.get(i).toJson().getString("afliacionContratoPK"));
-    		i++;
-    	}
-    	json.put("afiliacionContratoList", lista);
-    	lista = new JSONArray();
+    	l1.forEach((elemento) -> lista1.put(elemento.toJson().getString("afiliacionContratoPK")));
+    	json.put("afiliacionContratoList", lista1);
+    	final JSONArray lista2 = new JSONArray();
     	List<AfiliacionEmpleado> l2 = this.getAfiliacionEmpleadoList();
-    	i = 0;
-    	while (l2.get(i) != null) {
-    		lista.put(l2.get(i).toJson().getString("afiliacionEmpleadoPK"));
-    		i++;
-    	}
-    	json.put("afiliacionEmpleadoList", lista);
-    	lista = new JSONArray();
+    	l2.forEach((elemento) -> lista2.put(elemento.toJson().getString("afiliacionEmpleadoPK")));
+    	json.put("afiliacionEmpleadoList", lista2);
+    	final JSONArray lista3 = new JSONArray();
     	List<AfiliacionEmpresa> l3 = this.getAfiliacionEmpresaList();
-    	i = 0;
-    	while (l3.get(i) != null) {
-    		lista.put(l3.get(i).toJson().getString("afiliacionEmpresaPK"));
-    		i++;
-    	}
-    	json.put("afiliacionEmpresaList", lista);
+    	l3.forEach((elemento) -> lista3.put(elemento.toJson().getString("afiliacionEmpresaPK")));
+    	json.put("afiliacionEmpresaList", lista3);
     	return json;
     	}
     

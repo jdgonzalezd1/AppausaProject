@@ -7,10 +7,8 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -21,14 +19,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
 
 /**
  *
@@ -151,8 +146,8 @@ public class ContratoLicencia implements Serializable {
     	json.put("contratoLicenciaPK", this.getContratoLicenciaPK().toJson());
     	json.put("fechaInicio", this.getFechaInicio());
     	json.put("fechaFin", this.getFechaFin());
-    	json.put("contrato", this.getContrato1().toJson());
-    	json.put("tipoLicencia", this.getTipoLicencia().toJson());
+    	json.put("contrato", this.getContrato1().toJson().getString("contratoPK"));
+    	json.put("tipoLicencia", this.getTipoLicencia().toJson().getString("nombre"));
     	return json;    	
     }
     
@@ -163,10 +158,6 @@ public class ContratoLicencia implements Serializable {
     	if (json.getString("fechaInicio") != "" && json.getString("fechaInicio") != null){
     		this.setFechaFin(LocalDate.parse(json.getString("fechaFin"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     	}
- 	   	Contrato c = this.getContrato1().fromJson(json.getJSONObject("contrato"));
-    	this.setContrato1(c);
-    	TipoLicencia tl = this.getTipoLicencia().fromJson(json.getJSONObject("tipoLicencia"));
-    	this.setTipoLicencia(tl);
     	return this;
     }
     

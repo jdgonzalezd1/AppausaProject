@@ -7,7 +7,6 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -19,8 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -116,13 +113,9 @@ public class Rol implements Serializable {
     	JSONObject json = new JSONObject();
     	json.put("nombre", this.getNombre());
     	json.put("descrpcion", this.getDescrpcion());
-    	JSONArray lista = new JSONArray();
+    	final JSONArray lista = new JSONArray();
     	List<Cuenta> l = this.getCuentas();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson().getString("empleado"));
-    		i++;
-    	}
+    	l.forEach((elemento) -> lista.put(elemento.toJson().getString("empleado")));
     	json.put("cuentas", lista);
     	return json;
     }

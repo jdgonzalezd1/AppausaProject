@@ -7,10 +7,8 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -20,14 +18,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
 
 /**
  *
@@ -145,8 +140,8 @@ public class AfiliacionEmpresa implements Serializable {
     	json.put("afiliacionEmpresaPK", this.getAfiliacionEmpresaPK().toJson());
     	json.put("fechaInicio", this.getFechaInicio());
     	json.put("fechaFin", this.getFechaFin());
-    	json.put("empresa", this.getEmpresa1().toJson());
-    	json.put("entidad", this.getEntidad1().toJson());
+    	json.put("empresa", this.getEmpresa1().toJson().getString("nit"));
+    	json.put("entidad", this.getEntidad1().toJson().getString("nit"));
     	return json;
     }
     
@@ -156,10 +151,6 @@ public class AfiliacionEmpresa implements Serializable {
     	if (json.getString("fechaInicio") != "" && json.getString("fechaInicio") != null){
     		this.setFechaFin(LocalDate.parse(json.getString("fechaFin"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     	}
-    	Empresa em = this.getEmpresa1().fromJson(json.getJSONObject("empresa"));
-    	this.setEmpresa1(em);
-    	Entidad en = this.getEntidad1().fromJson(json.getJSONObject("entidad"));
-    	this.setEntidad1(en);
     	return this;
     }
     

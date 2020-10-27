@@ -31,8 +31,6 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.json.*;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 
 /**
  *
@@ -151,15 +149,10 @@ public class AfeccionMedica implements Serializable {
     	json.put("nombre", this.getNombre());
     	json.put("descripcion", this.getDescrip());
     	json.put("indicaciones", this.getIndicaciones());
-    	json.put("tipo", this.getTipo().toJson());
+    	json.put("tipo", this.getTipo().toJson().getString("nombre"));
     	JSONArray lista = new JSONArray();
     	List<AfeccionEmpleado> l = getAfeccionEmpleadoList();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		JSONObject obj = l.get(i).toJson();
-    		lista.put(obj);
-    		i++;
-    	}
+    	l.forEach((elemento) -> lista.put(elemento.toJson().getString("afeccionEmpleadoPK")));
     	json.put("listaAfeccionEmpleado", lista);
     	return json;
     }
@@ -168,18 +161,6 @@ public class AfeccionMedica implements Serializable {
     	this.setNombre(json.getString("nombre"));
     	this.setDescrip(json.getString("descripcion"));
     	this.setIndicaciones(json.getString("indicaciones"));
-    	TipoAfeccion ta = this.getTipo().fromJson(json.getJSONObject("tipo"));
-    	this.setTipo(ta);
-    	ArrayList<AfeccionEmpleado> list = new ArrayList<AfeccionEmpleado>();     
-    	JSONArray jsonArray = json.getJSONArray("listaAfeccionEmpleado"); 
-    	int i = 0;
-    	while (jsonArray.get(i) != null) {
-    		AfeccionEmpleado ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list.add(ae);
-    	    i++;
-    	   } 
-    	this.setAfeccionEmpleadoList(list);
     	return this;
     }
     

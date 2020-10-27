@@ -12,7 +12,6 @@ import javax.persistence.Embeddable;
 
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
 
 /**
  *

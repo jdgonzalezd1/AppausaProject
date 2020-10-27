@@ -7,9 +7,6 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -29,7 +26,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
 
 /**
  *
@@ -225,14 +221,10 @@ public class ConsultaMedica implements Serializable {
     	json.put("tipo", this.getTipo());
     	JSONArray lista = new JSONArray();
     	List<Incapacidad> l = this.getIncapacidades();
-    	int i = 0;
-    	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson().getString("cod"));
-    		i++;
-    	}
+    	l.forEach((elemento) -> lista.put(elemento.toJson().getString("cod")));
     	json.put("incapacidades", lista);
-    	json.put("empleado", this.getEmpleado().toJson());
-    	json.put("entidad", this.getEntidad().toJson());
+    	json.put("empleado", this.getEmpleado().toJson().getString("numDocumento"));
+    	json.put("entidad", this.getEntidad().toJson().getString("nit"));
     	return json;  
     }
     
@@ -243,10 +235,6 @@ public class ConsultaMedica implements Serializable {
     	this.setEstatura(json.getString("estatura"));
     	this.setMedico(json.getString("medico"));
     	this.setTipo(json.getString("tipo"));
-    	Empleado em = this.getEmpleado().fromJson(json.getJSONObject("empleado"));
-    	this.setEmpleado(em);
-    	Entidad en = this.getEntidad().fromJson(json.getJSONObject("entidad"));
-    	this.setEntidad(en);
     	return this;
     }
     

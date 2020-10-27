@@ -10,7 +10,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
