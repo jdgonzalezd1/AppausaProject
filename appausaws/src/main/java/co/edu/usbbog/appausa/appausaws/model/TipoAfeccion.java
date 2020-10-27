@@ -147,7 +147,7 @@ public class TipoAfeccion implements Serializable {
     	int i = 0;
     	while (jsonArray.get(i) != null) {
     		AfeccionMedica ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
+    		ae.fromJson(jsonArray.getJSONObject(i));
     	    list.add(ae);
     	   } 
     	this.setAfeccionesMedicas(list);

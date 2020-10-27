@@ -340,7 +340,7 @@ public class Empleado implements Serializable {
     	int i = 0;
     	while (jsonArray.get(i) != null) {
     		AfeccionEmpleado ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
+    		ae.fromJson(jsonArray.getJSONObject(i));
     	    list.add(ae);
     	    i++;
     	   } 
@@ -350,7 +350,7 @@ public class Empleado implements Serializable {
     	i = 0;
     	while (jsonArray.get(i) != null) {
     		AfiliacionEmpleado ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
+    		ae.fromJson(jsonArray.getJSONObject(i));
     	    list1.add(ae);
     	    i++;
     	   } 
@@ -360,7 +360,7 @@ public class Empleado implements Serializable {
     	i = 0;
     	while (jsonArray.get(i) != null) {
     		ConsultaMedica ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
+    		ae.fromJson(jsonArray.getJSONObject(i));
     	    list2.add(ae);
     	    i++;
     	   } 

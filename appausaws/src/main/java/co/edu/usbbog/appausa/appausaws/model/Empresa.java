@@ -261,7 +261,7 @@ public class Empresa implements Serializable {
     	int i = 0;
     	while (jsonArray.get(i) != null) {
     		AfiliacionEmpresa ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
+    		ae.fromJson(jsonArray.getJSONObject(i));
     	    list.add(ae);
     	    i++;
     	   } 
@@ -271,7 +271,7 @@ public class Empresa implements Serializable {
     	i = 0;
     	while (jsonArray.get(i) != null) {
     		Contrato ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
+    		ae.fromJson(jsonArray.getJSONObject(i));
     	    list1.add(ae);
     	    i++;
     	   } 

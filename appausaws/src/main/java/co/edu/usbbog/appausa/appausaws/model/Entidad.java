@@ -265,7 +265,7 @@ public class Entidad implements Serializable {
     	int i = 0;
     	while (jsonArray.get(i) != null) {
     		AfeccionEmpleado ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
+    		ae.fromJson(jsonArray.getJSONObject(i));
     	    list.add(ae);
     	    i++;
     	} 
@@ -276,7 +276,7 @@ public class Entidad implements Serializable {
     	i = 0;
     	while (jsonArray.get(i) != null) {
     		AfiliacionContrato ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
+    		ae.fromJson(jsonArray.getJSONObject(i));
     	    list1.add(ae);
     	    i++;
     	   } 
@@ -287,7 +287,7 @@ public class Entidad implements Serializable {
     	i = 0;
     	while (jsonArray.get(i) != null) {
     		AfiliacionEmpleado ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
+    		ae.fromJson(jsonArray.getJSONObject(i));
     	    list2.add(ae);
     	    i++;
     	   } 
@@ -298,7 +298,7 @@ public class Entidad implements Serializable {
     	i = 0;
     	while (jsonArray.get(i) != null) {
     		AfiliacionEmpresa ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
+    		ae.fromJson(jsonArray.getJSONObject(i));
     	    list3.add(ae);
     	    i++;
     	   } 
