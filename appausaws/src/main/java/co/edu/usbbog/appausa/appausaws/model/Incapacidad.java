@@ -8,6 +8,8 @@ package co.edu.usbbog.appausa.appausaws.model;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -50,13 +52,11 @@ public class Incapacidad implements Serializable {
     @Column(nullable = false)
     protected Integer cod;
     @Basic(optional = false)
-    @Column(name = "inicio_incapacidad", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date inicioIncapacidad;
+    @Column(name = "inicio_incapacidad", nullable = false, columnDefinition = "DATE")
+    private LocalDate inicioIncapacidad;
     @Basic(optional = false)
-    @Column(name = "fin_incapacidad", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date finIncapacidad;
+    @Column(name = "fin_incapacidad", nullable = false, columnDefinition = "DATE")
+    private LocalDate finIncapacidad;
     @Basic(optional = false)
     @Lob
     @Column(nullable = false, length = 65535)
@@ -75,7 +75,7 @@ public class Incapacidad implements Serializable {
         this.cod = cod;
     }
 
-    public Incapacidad(Integer cod, Date inicioIncapacidad, Date finIncapacidad, String indicaciones) {
+    public Incapacidad(Integer cod, LocalDate inicioIncapacidad, LocalDate finIncapacidad, String indicaciones) {
         this.cod = cod;
         this.inicioIncapacidad = inicioIncapacidad;
         this.finIncapacidad = finIncapacidad;
@@ -91,19 +91,19 @@ public class Incapacidad implements Serializable {
         this.cod = cod;
     }
 
-    public Date getInicioIncapacidad() {
+    public LocalDate getInicioIncapacidad() {
         return inicioIncapacidad;
     }
 
-    public void setInicioIncapacidad(Date inicioIncapacidad) {
+    public void setInicioIncapacidad(LocalDate inicioIncapacidad) {
         this.inicioIncapacidad = inicioIncapacidad;
     }
 
-    public Date getFinIncapacidad() {
+    public LocalDate getFinIncapacidad() {
         return finIncapacidad;
     }
 
-    public void setFinIncapacidad(Date finIncapacidad) {
+    public void setFinIncapacidad(LocalDate finIncapacidad) {
         this.finIncapacidad = finIncapacidad;
     }
 
@@ -169,10 +169,8 @@ public class Incapacidad implements Serializable {
     
     public Incapacidad fromJson(JSONObject json) throws ParseException {
     	this.setCod((Integer) json.getInt("cod"));
-    	Date f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("inicioIncapacidad"));
-    	this.setInicioIncapacidad(f);
-    	f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("finIncapacidad"));
-    	this.setFinIncapacidad(f);
+    	this.setInicioIncapacidad(LocalDate.parse(json.getString("inicioIncapacidad"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    	this.setFinIncapacidad(LocalDate.parse(json.getString("finIncapacidad"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     	this.setIndicaciones(json.getString("indicaciones"));
     	ConsultaMedica cm = this.getConsultaMedica().fromJson(json.getJSONObject("consultaMedica"));
     	this.setConsultaMedica(cm);

@@ -231,7 +231,7 @@ public class Empresa implements Serializable {
     	List<AfiliacionEmpresa> l = getAfiliacionEmpresaList();
     	int i = 0;
     	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
+    		lista.put(l.get(i).toJson().getString("afiliacionEmpresaPK"));
     		i++;
     	}
     	json.put("afiliacionEmpresaist", lista);
@@ -239,7 +239,7 @@ public class Empresa implements Serializable {
     	List<Contrato> l1 = getContratoList();
     	i = 0;
     	while (l1.get(i) != null) {
-    		lista.put(l1.get(i).toJson());
+    		lista.put(l1.get(i).toJson().getString("contratoPK"));
     		i++;
     	}
     	json.put("contratoList", lista);
@@ -256,26 +256,6 @@ public class Empresa implements Serializable {
     	this.setDescripEmpresa(json.getString("descripEmpresa"));
     	this.setNumEmpleados(json.getInt("numEmpleados"));
     	this.setNombre(json.getString("tipo"));
-    	ArrayList<AfiliacionEmpresa> list = new ArrayList<AfiliacionEmpresa>();     
-    	JSONArray jsonArray = json.getJSONArray("afiliacionEmpresaist"); 
-    	int i = 0;
-    	while (jsonArray.get(i) != null) {
-    		AfiliacionEmpresa ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list.add(ae);
-    	    i++;
-    	   } 
-    	this.setAfiliacionEmpresaList(list);
-    	ArrayList<Contrato> list1 = new ArrayList<Contrato>();     
-    	jsonArray = json.getJSONArray("contratoList"); 
-    	i = 0;
-    	while (jsonArray.get(i) != null) {
-    		Contrato ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list1.add(ae);
-    	    i++;
-    	   } 
-    	this.setContratoList(list1);
     	return this;
     }
     

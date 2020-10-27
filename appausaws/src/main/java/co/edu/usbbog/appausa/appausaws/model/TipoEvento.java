@@ -133,7 +133,7 @@ public class TipoEvento implements Serializable {
     	List<Log> l = this.getLogs();
     	int i = 0;
     	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
+    		lista.put(l.get(i).toJson().getString("id"));
     		i++;
     	}
     	json.put("logs", lista);
@@ -143,16 +143,6 @@ public class TipoEvento implements Serializable {
     public TipoEvento fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setNombre(json.getString("nombre"));
     	this.setDescripcion(json.getString("descrpcion"));
-    	ArrayList<Log> list = new ArrayList<Log>();     
-    	JSONArray jsonArray = json.getJSONArray("logs"); 
-    	int i = 0;
-    	while (jsonArray.get(i) != null) {
-    		Log ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list.add(ae);
-    	    i++;
-    	} 
-    	this.setLogs(list);
     	return this;
     }
     

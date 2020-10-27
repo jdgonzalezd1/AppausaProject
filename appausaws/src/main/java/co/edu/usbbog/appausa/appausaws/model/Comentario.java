@@ -8,6 +8,9 @@ package co.edu.usbbog.appausa.appausaws.model;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -63,9 +66,8 @@ public class Comentario implements Serializable {
     @Column(length = 45)
     private String respuesta;
     @Basic(optional = false)
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fecha;
+    @Column(name = "fecha", nullable = false, columnDefinition = "DATETIME")
+    private LocalDateTime fecha;
     @JoinColumn(name = "cuenta_empleado", referencedColumnName = "empleado", nullable = false)
     @ManyToOne(optional = false)
     private Cuenta cuentaEmpleado;
@@ -77,7 +79,7 @@ public class Comentario implements Serializable {
         this.cod = cod;
     }
 
-    public Comentario(Integer cod, String contenido, short leido, Date fecha) {
+    public Comentario(Integer cod, String contenido, short leido, LocalDateTime fecha) {
         this.cod = cod;
         this.contenido = contenido;
         this.leido = leido;
@@ -116,11 +118,11 @@ public class Comentario implements Serializable {
         this.respuesta = respuesta;
     }
 
-    public Date getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 
@@ -173,8 +175,7 @@ public class Comentario implements Serializable {
     	this.setContenido(json.getString("contenido"));
     	this.setLeido((short) json.get("leido"));
     	this.setRespuesta(json.getString("respuesta"));
-    	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getString("fecha"));
-    	this.setFecha(f);
+    	this.setFecha(LocalDateTime.parse(json.getString("fechaInicio"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     	Cuenta c = this.getCuentaEmpleado().fromJson(json.getJSONObject("cuentaEmpleado"));
     	this.setCuentaEmpleado(c);
     	return this;

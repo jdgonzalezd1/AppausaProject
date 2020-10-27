@@ -8,6 +8,8 @@ package co.edu.usbbog.appausa.appausaws.model;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -69,9 +71,8 @@ public class Empleado implements Serializable {
     @Column(nullable = false, length = 45)
     private String apellidos;
     @Basic(optional = false)
-    @Column(name = "fecha_nacimiento", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date fechaNacimiento;
+    @Column(name = "fecha_nacimiento", nullable = false, columnDefinition = "DATE")
+    private LocalDate fechaNacimiento;
     @Basic(optional = false)
     @Column(nullable = false)
     private int edad;
@@ -108,7 +109,7 @@ public class Empleado implements Serializable {
         this.numDocumento = numDocumento;
     }
 
-    public Empleado(Integer numDocumento, String tipoDocumento, String nombres, String apellidos, Date fechaNacimiento, int edad, String correoElectronico, int telefono, String direccion, String ciudad, String nacionalidad) {
+    public Empleado(Integer numDocumento, String tipoDocumento, String nombres, String apellidos, LocalDate fechaNacimiento, int edad, String correoElectronico, int telefono, String direccion, String ciudad, String nacionalidad) {
         this.numDocumento = numDocumento;
         this.tipoDocumento = tipoDocumento;
         this.nombres = nombres;
@@ -154,11 +155,11 @@ public class Empleado implements Serializable {
         this.apellidos = apellidos;
     }
 
-    public Date getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
@@ -297,7 +298,7 @@ public class Empleado implements Serializable {
     	List<AfiliacionEmpleado> l = getAfiliacionEmpleadoList();
     	int i = 0;
     	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
+    		lista.put(l.get(i).toJson().getString("afiliacionEmpleadoPK"));
     		i++;
     	}
     	json.put("afiliacionEmpleadoList", lista);
@@ -305,7 +306,7 @@ public class Empleado implements Serializable {
     	List<ConsultaMedica> l1 = getConsultaMedicaList();
     	i = 0;
     	while (l1.get(i) != null) {
-    		lista.put(l1.get(i).toJson());
+    		lista.put(l1.get(i).toJson().getString("id"));
     		i++;
     	}
     	json.put("consultaMedicaList", lista);
@@ -313,7 +314,7 @@ public class Empleado implements Serializable {
     	List<AfeccionEmpleado> l2 = getAfeccionEmpleadoList();
     	i = 0;
     	while (l2.get(i) != null) {
-    		lista.put(l2.get(i).toJson());
+    		lista.put(l2.get(i).toJson().getString("afeccionEmpleadoPK"));
     		i++;
     	}
     	json.put("afeccionEmpleadoList", lista);
@@ -325,46 +326,13 @@ public class Empleado implements Serializable {
     	this.setTipoDocumento(json.getString("tipoDocumento"));
     	this.setNombres(json.getString("nombres"));
     	this.setApellidos(json.getString("apellidos"));
-    	Date f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("fechaNacimiento"));
-    	this.setFechaNacimiento(f);
+    	this.setFechaNacimiento(LocalDate.parse(json.getString("fechaNacimiento"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     	this.setEdad(json.getInt("edad"));
     	this.setCorreoElectronico(json.getString("correoElectronico"));
     	this.setTelefono(json.getInt("telefono"));
     	this.setDireccion(json.getString("direccion"));
     	this.setCiudad(json.getString("ciudad"));
     	this.setNacionalidad(json.getString("nacionalidad"));
-    	Cuenta c = this.getCuenta().fromJson(json.getJSONObject("cuenta"));
-    	this.setCuenta(c);
-    	ArrayList<AfeccionEmpleado> list = new ArrayList<AfeccionEmpleado>();     
-    	JSONArray jsonArray = json.getJSONArray("afeccionEmpleadoList"); 
-    	int i = 0;
-    	while (jsonArray.get(i) != null) {
-    		AfeccionEmpleado ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list.add(ae);
-    	    i++;
-    	   } 
-    	this.setAfeccionEmpleadoList(list);
-    	ArrayList<AfiliacionEmpleado> list1 = new ArrayList<AfiliacionEmpleado>();     
-    	jsonArray = json.getJSONArray("afiliacionEmpleadoList"); 
-    	i = 0;
-    	while (jsonArray.get(i) != null) {
-    		AfiliacionEmpleado ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list1.add(ae);
-    	    i++;
-    	   } 
-    	this.setAfiliacionEmpleadoList(list1);
-    	ArrayList<ConsultaMedica> list2 = new ArrayList<ConsultaMedica>();     
-    	jsonArray = json.getJSONArray("consultaMedicaList"); 
-    	i = 0;
-    	while (jsonArray.get(i) != null) {
-    		ConsultaMedica ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list2.add(ae);
-    	    i++;
-    	   } 
-    	this.setConsultaMedicaList(list2);
     	return this;
     }
     

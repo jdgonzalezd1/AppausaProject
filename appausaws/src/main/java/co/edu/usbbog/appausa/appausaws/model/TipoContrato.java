@@ -133,7 +133,7 @@ public class TipoContrato implements Serializable {
     	List<Contrato> l = this.getContratos();
     	int i = 0;
     	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
+    		lista.put(l.get(i).toJson().getString("contratoPK"));
     		i++;
     	}
     	json.put("contratos", lista);
@@ -143,16 +143,6 @@ public class TipoContrato implements Serializable {
     public TipoContrato fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setNombre(json.getString("nombre"));
     	this.setDescripcion(json.getString("descrpcion"));
-    	ArrayList<Contrato> list = new ArrayList<Contrato>();     
-    	JSONArray jsonArray = json.getJSONArray("contratos"); 
-    	int i = 0;
-    	while (jsonArray.get(i) != null) {
-    		Contrato ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list.add(ae);
-    	    i++;
-    	} 
-    	this.setContratos(list);
     	return this;
     }
     

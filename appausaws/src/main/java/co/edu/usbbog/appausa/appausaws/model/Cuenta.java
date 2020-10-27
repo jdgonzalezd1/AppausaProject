@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -69,9 +72,8 @@ public class Cuenta implements Serializable {
     @Column(nullable = false, length = 45)
     private String contrasenia;
     @Basic(optional = false)
-    @Column(name = "ultimo_acceso", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date ultimoAcceso;
+    @Column(name = "ultimo_acceso", nullable = false, columnDefinition = "DATETIME")
+    private LocalDateTime ultimoAcceso;
     @Basic(optional = false)
     @Column(name = "puntaje_total", nullable = false, length = 45)
     private String puntajeTotal;
@@ -79,13 +81,11 @@ public class Cuenta implements Serializable {
     @Column(name = "puntaje_mes", nullable = false, length = 45)
     private String puntajeMes;
     @Basic(optional = false)
-    @Column(name = "tiempo_total", nullable = false)
-    @Temporal(TemporalType.TIME)
-    private Date tiempoTotal;
+    @Column(name = "tiempo_total", nullable = false, columnDefinition = "TIME")
+    private LocalTime tiempoTotal;
     @Basic(optional = false)
-    @Column(name = "tiempo_mes", nullable = false)
-    @Temporal(TemporalType.TIME)
-    private Date tiempoMes;
+    @Column(name = "tiempo_mes", nullable = false, columnDefinition = "TIME")
+    private LocalTime tiempoMes;
     @JoinTable(name = "rol_cuenta", joinColumns = {
         @JoinColumn(name = "cuenta_empleado", referencedColumnName = "empleado", nullable = false)}, inverseJoinColumns = {
         @JoinColumn(name = "rol", referencedColumnName = "nombre", nullable = false)})
@@ -108,7 +108,7 @@ public class Cuenta implements Serializable {
         this.empleado = empleado;
     }
 
-    public Cuenta(Integer empleado, String username, String contrasenia, Date ultimoAcceso, String puntajeTotal, String puntajeMes, Date tiempoTotal, Date tiempoMes) {
+    public Cuenta(Integer empleado, String username, String contrasenia, LocalDateTime ultimoAcceso, String puntajeTotal, String puntajeMes, LocalTime tiempoTotal, LocalTime tiempoMes) {
         this.empleado = empleado;
         this.username = username;
         this.contrasenia = contrasenia;
@@ -143,11 +143,11 @@ public class Cuenta implements Serializable {
         this.contrasenia = contrasenia;
     }
 
-    public Date getUltimoAcceso() {
+    public LocalDateTime getUltimoAcceso() {
         return ultimoAcceso;
     }
 
-    public void setUltimoAcceso(Date ultimoAcceso) {
+    public void setUltimoAcceso(LocalDateTime ultimoAcceso) {
         this.ultimoAcceso = ultimoAcceso;
     }
 
@@ -167,19 +167,19 @@ public class Cuenta implements Serializable {
         this.puntajeMes = puntajeMes;
     }
 
-    public Date getTiempoTotal() {
+    public LocalTime getTiempoTotal() {
         return tiempoTotal;
     }
 
-    public void setTiempoTotal(Date tiempoTotal) {
+    public void setTiempoTotal(LocalTime tiempoTotal) {
         this.tiempoTotal = tiempoTotal;
     }
 
-    public Date getTiempoMes() {
+    public LocalTime getTiempoMes() {
         return tiempoMes;
     }
 
-    public void setTiempoMes(Date tiempoMes) {
+    public void setTiempoMes(LocalTime tiempoMes) {
         this.tiempoMes = tiempoMes;
     }
 
@@ -291,7 +291,7 @@ public class Cuenta implements Serializable {
     	List<Rol> l = getRoles();
     	int i = 0;
     	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
+    		lista.put(l.get(i).toJson().getString("nombre"));
     		i++;
     	}
     	json.put("roles", lista);
@@ -299,7 +299,7 @@ public class Cuenta implements Serializable {
     	List<Log> l1 = getLogs();
     	i = 0;
     	while (l1.get(i) != null) {
-    		lista.put(l1.get(i).toJson());
+    		lista.put(l1.get(i).toJson().getString("id"));
     		i++;
     	}
     	json.put("logs", lista);
@@ -307,7 +307,7 @@ public class Cuenta implements Serializable {
     	List<Comentario> l2 = getComentarioList();
     	i = 0;
     	while (l2.get(i) != null) {
-    		lista.put(l2.get(i).toJson());
+    		lista.put(l2.get(i).toJson().getString("codigo"));
     		i++;
     	}
     	json.put("comentarios", lista);
@@ -315,7 +315,7 @@ public class Cuenta implements Serializable {
     	List<Partida> l3 = getPartidas();
     	i = 0;
     	while (l3.get(i) != null) {
-    		lista.put(l3.get(i).toJson());
+    		lista.put(l3.get(i).toJson().getString("partidaPK"));
     		i++;
     	}
     	json.put("partidas", lista);
@@ -326,45 +326,11 @@ public class Cuenta implements Serializable {
     	this.setEmpleado(json.getInt("empleado"));
     	this.setUsername(json.getString("username"));
     	this.setContrasenia(json.getString("contrasenia"));
-    	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getString("ultimoAcceso"));
-    	this.setUltimoAcceso(f);
+    	this.setUltimoAcceso(LocalDateTime.parse(json.getString("ultimoAcceso"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     	this.setPuntajeTotal(json.getString("puntajeTotal"));
     	this.setPuntajeMes(json.getString("puntajeMes"));
-    	f = new SimpleDateFormat("HH:mm:ss").parse(json.getString("tiemnpoTotal"));
-    	this.setTiempoTotal(f);
-    	f = new SimpleDateFormat("HH:mm:ss").parse(json.getString("tiemnpoMes"));
-    	this.setTiempoMes(f);
-   		ArrayList<Rol> list = new ArrayList<Rol>();     
-   		JSONArray jsonArray = json.getJSONArray("roles"); 
-   		int i = 0;
-   		while (jsonArray.get(i) != null) {
-   			Rol ae = null;
-   			ae.fromJson((JSONObject) jsonArray.get(i));
-   			list.add(ae);
-   			i++;
-   	   }
-   		this.setRoles(list);
-   		jsonArray = null;
-   		ArrayList<Log> list1 = new ArrayList<Log>();     
-   		jsonArray = json.getJSONArray("logs"); 
-   		i = 0;
-   		while (jsonArray.get(i) != null) {
-   			Rol ae = null;
-   			ae.fromJson((JSONObject) jsonArray.get(i));
-   			list.add(ae);
-   			i++;
-   	   }
-   		this.setLogs(list1);
-   		jsonArray = null;
-   		ArrayList<Comentario> list2 = new ArrayList<Comentario>();     
-   		jsonArray = json.getJSONArray("logs"); 
-   		i = 0;
-   		while (jsonArray.get(i) != null) {
-   			Rol ae = null;
-   			ae.fromJson((JSONObject) jsonArray.get(i));
-   			list.add(ae);
-   			i++;
-   	   }
+    	this.setTiempoTotal(LocalTime.parse(json.getString("tiempoTotal"), DateTimeFormatter.ofPattern("HH:mm:ss")));
+    	this.setTiempoMes(LocalTime.parse(json.getString("tiempoMes"), DateTimeFormatter.ofPattern("HH:mm:ss")));
     	return this;
     }
     

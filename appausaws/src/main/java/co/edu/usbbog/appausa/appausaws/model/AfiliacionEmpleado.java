@@ -7,6 +7,8 @@ package co.edu.usbbog.appausa.appausaws.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -49,12 +51,10 @@ public class AfiliacionEmpleado implements Serializable {
     @Column(nullable = false, length = 45)
     private String tipo;
     @Basic(optional = false)
-    @Column(name = "fecha_inicio", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date fechaInicio;
-    @Column(name = "fecha_fin")
-    @Temporal(TemporalType.DATE)
-    private Date fechaFin;
+    @Column(name = "fecha_inicio", nullable = false, columnDefinition = "DATE")
+    private LocalDate fechaInicio;
+    @Column(name = "fecha_fin", nullable = true, columnDefinition = "DATE")
+    private LocalDate fechaFin;
     @JoinColumn(name = "empleado", referencedColumnName = "num_documento", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Empleado empleado1;
@@ -69,7 +69,7 @@ public class AfiliacionEmpleado implements Serializable {
         this.afiliacionEmpleadoPK = afiliacionEmpleadoPK;
     }
 
-    public AfiliacionEmpleado(AfiliacionEmpleadoPK afiliacionEmpleadoPK, String tipo, Date fechaInicio) {
+    public AfiliacionEmpleado(AfiliacionEmpleadoPK afiliacionEmpleadoPK, String tipo, LocalDate fechaInicio) {
         this.afiliacionEmpleadoPK = afiliacionEmpleadoPK;
         this.tipo = tipo;
         this.fechaInicio = fechaInicio;
@@ -95,19 +95,19 @@ public class AfiliacionEmpleado implements Serializable {
         this.tipo = tipo;
     }
 
-    public Date getFechaInicio() {
+    public LocalDate getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
+    public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Date getFechaFin() {
+    public LocalDate getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Date fechaFin) {
+    public void setFechaFin(LocalDate fechaFin) {
         this.fechaFin = fechaFin;
     }
 
@@ -167,8 +167,10 @@ public class AfiliacionEmpleado implements Serializable {
     	AfiliacionEmpleadoPK pk = this.getAfiliacionEmpleadoPK().fromJson(json.getJSONObject("afiliacionEmpleadoPK"));
     	this.setAfiliacionEmpleadoPK(pk);
     	this.setTipo(json.getString("tipo"));
-    	this.setFechaInicio((Date) json.get("fechaInicio"));
-    	this.setFechaFin((Date) json.get("fechaFin"));
+    	this.setFechaInicio(LocalDate.parse(json.getString("fechaInicio"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    	if (json.getString("fechaInicio") != "" && json.getString("fechaInicio") != null){
+    		this.setFechaFin(LocalDate.parse(json.getString("fechaFin"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    	}
     	Empleado e = this.getEmpleado1().fromJson(json.getJSONObject("empleado"));
     	this.setEmpleado1((Empleado) json.get("empleado"));
     	Entidad en = this.getEntidad1().fromJson(json.getJSONObject("entidad"));

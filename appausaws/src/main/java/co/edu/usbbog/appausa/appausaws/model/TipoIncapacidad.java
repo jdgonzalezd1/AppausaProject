@@ -148,7 +148,7 @@ public class TipoIncapacidad implements Serializable {
     	List<Incapacidad> l = getIncapacidades();
     	int i = 0;
     	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
+    		lista.put(l.get(i).toJson().getString("cod"));
     		i++;
     	}
     	json.put("incapacidades", lista);

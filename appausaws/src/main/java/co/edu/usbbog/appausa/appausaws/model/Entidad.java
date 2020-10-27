@@ -222,7 +222,7 @@ public class Entidad implements Serializable {
     	List<AfeccionEmpleado> l = this.getAfeccionEmpleadoList();
     	int i = 0;
     	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
+    		lista.put(l.get(i).toJson().getString("afeccionEmpleadoPK"));
     		i++;
     	}
     	json.put("afeccionEmpleadoList", lista);
@@ -230,7 +230,7 @@ public class Entidad implements Serializable {
     	List<AfiliacionContrato> l1 = this.getAfiliacionContratoList();
     	i = 0;
     	while (l1.get(i) != null) {
-    		lista.put(l1.get(i).toJson());
+    		lista.put(l1.get(i).toJson().getString("afliacionContratoPK"));
     		i++;
     	}
     	json.put("afiliacionContratoList", lista);
@@ -238,7 +238,7 @@ public class Entidad implements Serializable {
     	List<AfiliacionEmpleado> l2 = this.getAfiliacionEmpleadoList();
     	i = 0;
     	while (l2.get(i) != null) {
-    		lista.put(l2.get(i).toJson());
+    		lista.put(l2.get(i).toJson().getString("afiliacionEmpleadoPK"));
     		i++;
     	}
     	json.put("afiliacionEmpleadoList", lista);
@@ -246,7 +246,7 @@ public class Entidad implements Serializable {
     	List<AfiliacionEmpresa> l3 = this.getAfiliacionEmpresaList();
     	i = 0;
     	while (l3.get(i) != null) {
-    		lista.put(l3.get(i).toJson());
+    		lista.put(l3.get(i).toJson().getString("afiliacionEmpresaPK"));
     		i++;
     	}
     	json.put("afiliacionEmpresaList", lista);
@@ -260,49 +260,6 @@ public class Entidad implements Serializable {
     	this.setTelefono(json.getInt("telefono"));
     	this.setDireccion(json.getString("direccion"));
     	this.setEmail(json.getString("email"));
-    	ArrayList<AfeccionEmpleado> list = new ArrayList<AfeccionEmpleado>();     
-    	JSONArray jsonArray = json.getJSONArray("afeccionEmpleadoList"); 
-    	int i = 0;
-    	while (jsonArray.get(i) != null) {
-    		AfeccionEmpleado ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list.add(ae);
-    	    i++;
-    	} 
-    	this.setAfeccionEmpleadoList(list);
-    	jsonArray = null;
-    	ArrayList<AfiliacionContrato> list1 = new ArrayList<AfiliacionContrato>();     
-    	jsonArray = json.getJSONArray("afiliacionContratoList"); 
-    	i = 0;
-    	while (jsonArray.get(i) != null) {
-    		AfiliacionContrato ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list1.add(ae);
-    	    i++;
-    	   } 
-    	this.setAfiliacionContratoList(list1);
-    	jsonArray = null;
-    	ArrayList<AfiliacionEmpleado> list2 = new ArrayList<AfiliacionEmpleado>();     
-    	jsonArray = json.getJSONArray("afiliacionEmpleadoList"); 
-    	i = 0;
-    	while (jsonArray.get(i) != null) {
-    		AfiliacionEmpleado ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list2.add(ae);
-    	    i++;
-    	   } 
-    	this.setAfiliacionEmpleadoList(list2);
-    	jsonArray = null;
-    	ArrayList<AfiliacionEmpresa> list3 = new ArrayList<AfiliacionEmpresa>();     
-    	jsonArray = json.getJSONArray("afiliacionEmpleadoList"); 
-    	i = 0;
-    	while (jsonArray.get(i) != null) {
-    		AfiliacionEmpresa ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list3.add(ae);
-    	    i++;
-    	   } 
-    	this.setAfiliacionEmpresaList(list3);
     	return this;
     }
 

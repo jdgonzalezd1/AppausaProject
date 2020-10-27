@@ -8,6 +8,8 @@ package co.edu.usbbog.appausa.appausaws.model;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -49,12 +51,10 @@ public class ContratoLicencia implements Serializable {
     @EmbeddedId
     protected ContratoLicenciaPK contratoLicenciaPK;
     @Basic(optional = false)
-    @Column(name = "fecha_inicio", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date fechaInicio;
-    @Column(name = "fecha_fin")
-    @Temporal(TemporalType.DATE)
-    private Date fechaFin;
+    @Column(name = "fecha_inicio", nullable = false, columnDefinition = "DATE")
+    private LocalDate fechaInicio;
+    @Column(name = "fecha_fin", nullable = true, columnDefinition = "DATE")
+    private LocalDate fechaFin;
     @JoinColumns({
         @JoinColumn(name = "contrato", referencedColumnName = "num_contrato", nullable = false, insertable = false, updatable = false)
         , @JoinColumn(name = "contrato_empresa", referencedColumnName = "empresa", nullable = false, insertable = false, updatable = false)
@@ -72,7 +72,7 @@ public class ContratoLicencia implements Serializable {
         this.contratoLicenciaPK = contratoLicenciaPK;
     }
 
-    public ContratoLicencia(ContratoLicenciaPK contratoLicenciaPK, Date fechaInicio) {
+    public ContratoLicencia(ContratoLicenciaPK contratoLicenciaPK, LocalDate fechaInicio) {
         this.contratoLicenciaPK = contratoLicenciaPK;
         this.fechaInicio = fechaInicio;
     }
@@ -89,19 +89,19 @@ public class ContratoLicencia implements Serializable {
         this.contratoLicenciaPK = contratoLicenciaPK;
     }
 
-    public Date getFechaInicio() {
+    public LocalDate getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
+    public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Date getFechaFin() {
+    public LocalDate getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Date fechaFin) {
+    public void setFechaFin(LocalDate fechaFin) {
         this.fechaFin = fechaFin;
     }
 
@@ -159,10 +159,10 @@ public class ContratoLicencia implements Serializable {
     public ContratoLicencia fromJson(JSONObject json) throws JSONException, ParseException {
     	ContratoLicenciaPK pk = this.getContratoLicenciaPK().fromJson(json.getJSONObject("contratoLicenciaPK"));
     	this.setContratoLicenciaPK(pk);
- 	   	Date f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("fechaInicio"));
- 	   	this.setFechaInicio(f);
- 	   	f = new SimpleDateFormat("dd/MM/yyyy").parse(json.getString("fechaFin"));
- 	   	this.setFechaFin(f);
+    	this.setFechaInicio(LocalDate.parse(json.getString("fechaInicio"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    	if (json.getString("fechaInicio") != "" && json.getString("fechaInicio") != null){
+    		this.setFechaFin(LocalDate.parse(json.getString("fechaFin"), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    	}
  	   	Contrato c = this.getContrato1().fromJson(json.getJSONObject("contrato"));
     	this.setContrato1(c);
     	TipoLicencia tl = this.getTipoLicencia().fromJson(json.getJSONObject("tipoLicencia"));

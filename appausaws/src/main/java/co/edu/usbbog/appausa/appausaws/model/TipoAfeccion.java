@@ -132,7 +132,7 @@ public class TipoAfeccion implements Serializable {
     	List<AfeccionMedica> l = this.getAfeccionesMedicas();
     	int i = 0;
     	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
+    		lista.put(l.get(i).toJson().getString("afeccionMedicaPK"));
     		i++;
     	}
     	json.put("afeccionesMedicas", lista);
@@ -142,15 +142,6 @@ public class TipoAfeccion implements Serializable {
     public TipoAfeccion fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setNombre(json.getString("nombre"));
     	this.setDescripcion(json.getString("descrpcion"));
-    	ArrayList<AfeccionMedica> list = new ArrayList<AfeccionMedica>();     
-    	JSONArray jsonArray = json.getJSONArray("afeccionesMedicas"); 
-    	int i = 0;
-    	while (jsonArray.get(i) != null) {
-    		AfeccionMedica ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list.add(ae);
-    	   } 
-    	this.setAfeccionesMedicas(list);
     	return this;
     }
 }

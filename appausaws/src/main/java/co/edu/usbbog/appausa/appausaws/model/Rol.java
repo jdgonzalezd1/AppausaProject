@@ -120,7 +120,7 @@ public class Rol implements Serializable {
     	List<Cuenta> l = this.getCuentas();
     	int i = 0;
     	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
+    		lista.put(l.get(i).toJson().getString("empleado"));
     		i++;
     	}
     	json.put("cuentas", lista);
@@ -130,16 +130,6 @@ public class Rol implements Serializable {
     public Rol fromJson(JSONObject json) throws JSONException, ParseException {
     	this.setNombre(json.getString("nombre"));
     	this.setDescrpcion(json.getString("descrpcion"));
-    	ArrayList<Cuenta> list = new ArrayList<Cuenta>();     
-    	JSONArray jsonArray = json.getJSONArray("cuentas"); 
-    	int i = 0;
-    	while (jsonArray.get(i) != null) {
-    		Cuenta ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list.add(ae);
-    	    i++;
-    	} 
-    	this.setCuentas(list);
     	return this;
     }
     

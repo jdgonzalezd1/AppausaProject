@@ -8,6 +8,8 @@ package co.edu.usbbog.appausa.appausaws.model;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -47,9 +49,8 @@ public class Log implements Serializable {
     @Column(nullable = false)
     private Integer id;
     @Basic(optional = false)
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fecha;
+    @Column(nullable = false, name = "fecha", columnDefinition = "DATETIME")
+    private LocalDateTime fecha;
     @Basic(optional = false)
     @Column(nullable = false, length = 45)
     private String mensaje;
@@ -70,7 +71,7 @@ public class Log implements Serializable {
         this.id = id;
     }
 
-    public Log(Integer id, Date fecha, String mensaje, String eventoNombre) {
+    public Log(Integer id, LocalDateTime fecha, String mensaje, String eventoNombre) {
         this.id = id;
         this.fecha = fecha;
         this.mensaje = mensaje;
@@ -85,11 +86,11 @@ public class Log implements Serializable {
         this.id = id;
     }
 
-    public Date getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 
@@ -163,8 +164,7 @@ public class Log implements Serializable {
     
     public Log fromJson(JSONObject json) throws ParseException {
     	this.setId((Integer) json.getInt("id"));
-    	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getString("fecha"));
-    	this.setFecha(f);
+    	this.setFecha(LocalDateTime.parse(json.getString("fecha"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     	this.setMensaje(json.getString("mensaje"));
     	this.setEventoNombre(json.getString("eventoNombre"));
     	Cuenta c = this.getCuenta().fromJson(json.getJSONObject("cuenta"));

@@ -156,7 +156,7 @@ public class TipoLicencia implements Serializable {
     	List<ContratoLicencia> l = this.getContratosLicencias();
     	int i = 0;
     	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
+    		lista.put(l.get(i).toJson().getString("contratoLicenciaPK"));
     		i++;
     	}
     	json.put("contratosLicencia", lista);
@@ -167,16 +167,6 @@ public class TipoLicencia implements Serializable {
     	this.setNombre(json.getString("nombre"));
     	this.setDescripcion(json.getString("descripcion"));
     	this.setRemunerada((short) json.getInt("remunerada"));
-    	ArrayList<ContratoLicencia> list = new ArrayList<ContratoLicencia>();     
-    	JSONArray jsonArray = json.getJSONArray("cuentas"); 
-    	int i = 0;
-    	while (jsonArray.get(i) != null) {
-    		ContratoLicencia ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list.add(ae);
-    	    i++;
-    	} 
-    	this.setContratosLicencias(list);
     	return this;
     }
     

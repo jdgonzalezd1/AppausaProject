@@ -227,7 +227,7 @@ public class ConsultaMedica implements Serializable {
     	List<Incapacidad> l = this.getIncapacidades();
     	int i = 0;
     	while (l.get(i) != null) {
-    		lista.put(l.get(i).toJson());
+    		lista.put(l.get(i).toJson().getString("cod"));
     		i++;
     	}
     	json.put("incapacidades", lista);
@@ -243,16 +243,6 @@ public class ConsultaMedica implements Serializable {
     	this.setEstatura(json.getString("estatura"));
     	this.setMedico(json.getString("medico"));
     	this.setTipo(json.getString("tipo"));
-    	ArrayList<Incapacidad> list = new ArrayList<Incapacidad>();     
-    	JSONArray jsonArray = json.getJSONArray("incapacidades"); 
-    	int i = 0;
-    	while (jsonArray.get(i) != null) {
-    		Incapacidad ae = null;
-    		ae.fromJson((JSONObject) jsonArray.get(i));
-    	    list.add(ae);
-    	    i++;
-    	   } 
-    	this.setIncapacidades(list);
     	Empleado em = this.getEmpleado().fromJson(json.getJSONObject("empleado"));
     	this.setEmpleado(em);
     	Entidad en = this.getEntidad().fromJson(json.getJSONObject("entidad"));

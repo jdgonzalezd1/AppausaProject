@@ -8,6 +8,9 @@ package co.edu.usbbog.appausa.appausaws.model;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -47,16 +50,15 @@ public class Partida implements Serializable {
     @EmbeddedId
     protected PartidaPK partidaPK;
     @Basic(optional = false)
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date inicio;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fin;
+    @Column(nullable = false,name = "inicio",columnDefinition = "DATETIME")
+    private LocalDateTime inicio;
+    @Column(nullable = false,name = "fin",columnDefinition = "DATETIME")
+    private LocalDateTime fin;
     @Basic(optional = false)
     @Column(nullable = false)
     private int puntaje;
-    @Temporal(TemporalType.TIME)
-    private Date duracion;
+    @Column(nullable = false,name = "duarion",columnDefinition = "TIME")
+    private LocalTime duracion;
     @JoinColumn(name = "cuenta", referencedColumnName = "empleado", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Cuenta cuenta;
@@ -71,7 +73,7 @@ public class Partida implements Serializable {
         this.partidaPK = partidaPK;
     }
 
-    public Partida(PartidaPK partidaPK, Date inicio, int puntaje) {
+    public Partida(PartidaPK partidaPK, LocalDateTime inicio, int puntaje) {
         this.partidaPK = partidaPK;
         this.inicio = inicio;
         this.puntaje = puntaje;
@@ -89,19 +91,19 @@ public class Partida implements Serializable {
         this.partidaPK = partidaPK;
     }
 
-    public Date getInicio() {
+    public LocalDateTime getInicio() {
         return inicio;
     }
 
-    public void setInicio(Date inicio) {
+    public void setInicio(LocalDateTime inicio) {
         this.inicio = inicio;
     }
 
-    public Date getFin() {
+    public LocalDateTime getFin() {
         return fin;
     }
 
-    public void setFin(Date fin) {
+    public void setFin(LocalDateTime fin) {
         this.fin = fin;
     }
 
@@ -113,11 +115,11 @@ public class Partida implements Serializable {
         this.puntaje = puntaje;
     }
 
-    public Date getDuracion() {
+    public LocalTime getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(Date duracion) {
+    public void setDuracion(LocalTime duracion) {
         this.duracion = duracion;
     }
 
@@ -178,12 +180,11 @@ public class Partida implements Serializable {
     	PartidaPK pk = this.getPartidaPK().fromJson(json.getJSONObject("partidaPK"));
     	this.setPartidaPK(pk);
     	Date f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getString("inicio"));
-    	this.setInicio(f);
+    	this.setInicio(LocalDateTime.parse(json.getString("inicio"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     	f = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(json.getString("fin"));
-    	this.setFin(f);
+    	this.setFin(LocalDateTime.parse(json.getString("fin"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     	this.setPuntaje((int) json.getInt("puntaje"));
-    	f = new SimpleDateFormat("HH:mm:ss").parse(json.getString("duracion"));
-    	this.setDuracion(f);
+    	this.setDuracion(LocalTime.parse(json.getString("duracion"), DateTimeFormatter.ofPattern("HH:mm:ss")));
     	Cuenta c = this.getCuenta().fromJson(json.getJSONObject("cuenta"));
     	this.setCuenta(c);
     	Juego j = this.getJuego().fromJson(json.getJSONObject("juego"));
